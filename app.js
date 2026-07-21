@@ -23750,7 +23750,7 @@ textarea{resize:vertical;width:100%;}
   .content{padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom));}
   .gasto-row,.repuesto-row{grid-template-columns:1fr;}
   .topbar{flex-wrap:wrap;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;}
-  .tabs{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap;gap:2px;-webkit-overflow-scrolling:touch;}
+  .tabs{order:3;flex:0 0 100%;overflow-x:auto;flex-wrap:nowrap;gap:2px;-webkit-overflow-scrolling:touch;}
   .tab{white-space:nowrap;padding:7px 10px;font-size:12.5px;}
   .status-mini{order:2;margin-left:auto;}
 }
