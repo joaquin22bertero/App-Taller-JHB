@@ -21718,13 +21718,110 @@
     }
   });
 
-  // app.jsx
+  // app-full.jsx
   var import_react = __toESM(require_react());
   var import_client = __toESM(require_client());
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   var GOOGLE_CLIENT_ID = "286258665-bqh23vpr4peaje2o684l4cp6np6nsnbf.apps.googleusercontent.com";
   var DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
   var DB_FILENAME = "taller_jhb_db.json";
+  var TIPOS_VEHICULO = ["Camioneta", "Cami\xF3n", "M\xE1quina agr\xEDcola", "Otro"];
+  var CATEGORIAS_FALLA = ["Diagn\xF3stico", "Reprogramaci\xF3n", "Limitado en velocidad/Potencia", "No arranca", "Se para", "Fallos el\xE9ctricos", "Fallos ABS", "Fallos 4x4"];
+  var SUBTIPOS_REPROGRAMACION = ["Potencia", "EGR", "DPF", "Urea", "DTC"];
+  var FORMAS_PAGO = ["Efectivo", "Transferencia", "Cheque", "Otro"];
+  var TIPOS_GASTO = ["Vi\xE1ticos", "Combustible", "Otro"];
+  var IVA_RATE = 0.21;
+  var ESTADOS = [
+    { v: "turno", l: "Turno / reservado", c: "#8B7CD6" },
+    { v: "ingresado", l: "Ingresado", c: "#3A4FB0" },
+    { v: "en_proceso", l: "En proceso", c: "#D6392F" },
+    { v: "pendiente_pago", l: "Terminado, pend. de pago", c: "#E0B93C" },
+    { v: "finalizado", l: "Finalizado y cobrado", c: "#4FAE7A" }
+  ];
+  var TABS = [
+    { v: "nueva_ficha", l: "Nueva ficha" },
+    { v: "tablero", l: "Tablero" },
+    { v: "fichas", l: "Fichas" },
+    { v: "clientes", l: "Clientes" },
+    { v: "vehiculos", l: "Veh\xEDculos" },
+    { v: "repuestos", l: "Repuestos" },
+    { v: "estadisticas", l: "Estad\xEDsticas" },
+    { v: "importar", l: "Importar" },
+    { v: "codigos", l: "C\xF3digos" }
+  ];
+  var CODIGOS_SEED = {
+    P0100: "Circuito del sensor de flujo de masa de aire (MAF) \u2014 se\xF1al an\xF3mala",
+    P0101: "Sensor MAF \u2014 rango/rendimiento fuera de lo esperado",
+    P0110: "Circuito del sensor de temperatura de aire de admisi\xF3n (IAT)",
+    P0115: "Circuito del sensor de temperatura del refrigerante (ECT)",
+    P0120: "Circuito del sensor de posici\xF3n del acelerador (TPS)",
+    P0130: "Circuito de la sonda de ox\xEDgeno (banco 1, sensor 1)",
+    P0171: "Sistema demasiado pobre (banco 1) \u2014 mezcla aire/combustible",
+    P0172: "Sistema demasiado rico (banco 1)",
+    P0174: "Sistema demasiado pobre (banco 2)",
+    P0201: "Circuito del inyector \u2014 cilindro 1",
+    P0217: "Sobretemperatura del motor",
+    P0230: "Circuito primario de la bomba de combustible",
+    P0300: "Fallo de encendido detectado (aleatorio/m\xFAltiples cilindros)",
+    P0301: "Fallo de encendido \u2014 cilindro 1",
+    P0302: "Fallo de encendido \u2014 cilindro 2",
+    P0303: "Fallo de encendido \u2014 cilindro 3",
+    P0304: "Fallo de encendido \u2014 cilindro 4",
+    P0335: "Circuito del sensor de posici\xF3n del cig\xFCe\xF1al (CKP)",
+    P0340: "Circuito del sensor de posici\xF3n del \xE1rbol de levas (CMP)",
+    P0401: "Flujo de EGR insuficiente detectado",
+    P0402: "Flujo de EGR excesivo detectado",
+    P0403: "Circuito el\xE9ctrico de la v\xE1lvula EGR",
+    P0420: "Eficiencia del catalizador por debajo del umbral (banco 1)",
+    P0440: "Sistema de control de emisiones evaporativas \u2014 mal funcionamiento",
+    P0455: "Fuga grande detectada en sistema EVAP",
+    P0460: "Circuito del sensor de nivel de combustible",
+    P0500: "Sensor de velocidad del veh\xEDculo (VSS) \u2014 mal funcionamiento",
+    P0505: "Sistema de control de ralent\xED \u2014 mal funcionamiento",
+    P0562: "Voltaje del sistema bajo",
+    P0563: "Voltaje del sistema alto",
+    P0601: "Error de memoria de control interno del m\xF3dulo (ECU)",
+    P0606: "Rendimiento del procesador del m\xF3dulo de control del motor",
+    P0700: "Solicitud de mal funcionamiento del sistema de control de transmisi\xF3n",
+    P0715: "Circuito del sensor de velocidad de entrada de la transmisi\xF3n",
+    P0720: "Circuito del sensor de velocidad de salida de la transmisi\xF3n",
+    P2002: "Eficiencia del catalizador del filtro de part\xEDculas (DPF) \u2014 banco 1",
+    P2004: "V\xE1lvula de control del colector de admisi\xF3n \u2014 atascada abierta",
+    P2200: "Circuito del sensor de NOx \u2014 banco 1",
+    P2263: "Sistema de sobrealimentaci\xF3n \u2014 rendimiento insuficiente",
+    P242F: "Filtro de part\xEDculas (DPF) \u2014 holl\xEDn acumulado en exceso",
+    P246C: "Reductor/Urea \u2014 nivel de calidad bajo",
+    P204F: "Reductor/Urea \u2014 nivel bajo",
+    U0100: "P\xE9rdida de comunicaci\xF3n con el m\xF3dulo de control del motor (ECU)",
+    U0101: "P\xE9rdida de comunicaci\xF3n con el m\xF3dulo de la transmisi\xF3n (TCM)",
+    U0121: "P\xE9rdida de comunicaci\xF3n con el m\xF3dulo de control de ABS"
+  };
+  var uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  var today = () => (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+  var money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(Number(n) || 0);
+  var fmtDate = (d) => {
+    if (!d) return "\u2014";
+    const dt = /* @__PURE__ */ new Date(d + "T00:00:00");
+    return dt.toLocaleDateString("es-AR");
+  };
+  var addDays = (dateStr, days) => {
+    if (!dateStr) return "";
+    const d = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
+    d.setDate(d.getDate() + days);
+    return d.toISOString().slice(0, 10);
+  };
+  var diasDesde = (dateStr) => {
+    if (!dateStr) return null;
+    const d = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
+    return Math.floor((Date.now() - d.getTime()) / 864e5);
+  };
+  var mondayOf = (dateStr) => {
+    const d = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
+    const day = d.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    d.setDate(d.getDate() + diff);
+    return d.toISOString().slice(0, 10);
+  };
   var tokenClient = null;
   var accessToken = null;
   var tokenExpiry = 0;
@@ -21748,7 +21845,6 @@
           scope: DRIVE_SCOPE,
           callback: () => {
           }
-          // se sobreescribe por llamada
         });
       }
       tokenClient.callback = (resp) => {
@@ -21766,25 +21862,22 @@
   }
   async function driveFetch(url, options = {}) {
     const token = await ensureAuth(false).catch(() => ensureAuth(true));
-    const resp = await fetch(url, {
-      ...options,
-      headers: { ...options.headers || {}, Authorization: `Bearer ${token}` }
-    });
+    const resp = await fetch(url, { ...options, headers: { ...options.headers || {}, Authorization: `Bearer ${token}` } });
     if (!resp.ok) {
-      const text = await resp.text().catch(() => "");
-      throw new Error(`Drive API error ${resp.status}: ${text}`);
+      const t = await resp.text().catch(() => "");
+      throw new Error(`Drive API ${resp.status}: ${t}`);
     }
     return resp;
   }
-  async function findDbFile() {
-    const q = encodeURIComponent(`name='${DB_FILENAME}' and trashed=false`);
+  async function findFileByName(name) {
+    const q = encodeURIComponent(`name='${name}' and trashed=false`);
     const resp = await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&spaces=drive&fields=files(id,name)`);
     const data = await resp.json();
     return data.files && data.files[0] || null;
   }
-  async function createDbFile(initialData) {
-    const metadata = { name: DB_FILENAME, mimeType: "application/json" };
+  async function createJsonFile(name, obj) {
     const boundary = "taller_jhb_boundary";
+    const metadata = { name, mimeType: "application/json" };
     const body = `--${boundary}\r
 Content-Type: application/json; charset=UTF-8\r
 \r
@@ -21792,7 +21885,7 @@ ${JSON.stringify(metadata)}\r
 --${boundary}\r
 Content-Type: application/json\r
 \r
-${JSON.stringify(initialData)}\r
+${JSON.stringify(obj)}\r
 --${boundary}--`;
     const resp = await driveFetch("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name", {
       method: "POST",
@@ -21801,7 +21894,7 @@ ${JSON.stringify(initialData)}\r
     });
     return resp.json();
   }
-  async function readDbFile(fileId) {
+  async function readJsonFile(fileId) {
     const resp = await driveFetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`);
     const text = await resp.text();
     try {
@@ -21810,19 +21903,55 @@ ${JSON.stringify(initialData)}\r
       return {};
     }
   }
-  async function writeDbFile(fileId, data) {
+  async function writeJsonFile(fileId, obj) {
     await driveFetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      body: JSON.stringify(obj)
     });
   }
   async function getOrCreateDb() {
-    let file = await findDbFile();
-    if (!file) {
-      file = await createDbFile({ clientes: {} });
-    }
+    let file = await findFileByName(DB_FILENAME);
+    if (!file) file = await createJsonFile(DB_FILENAME, { clientes: {}, vehiculos: {}, repuestos: {}, fichas: {}, config: { tarifaViaticoKm: "" }, codigosDict: CODIGOS_SEED });
     return file.id;
+  }
+  async function subirFoto(dataUrl, nombre) {
+    const [, mediaType, base64] = dataUrl.match(/^data:(.+);base64,(.*)$/) || [];
+    const byteChars = atob(base64);
+    const bytes = new Uint8Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
+    const blob = new Blob([bytes], { type: mediaType });
+    const boundary = "taller_jhb_foto_boundary";
+    const metadata = { name: nombre, mimeType: mediaType };
+    const pre = `--${boundary}\r
+Content-Type: application/json; charset=UTF-8\r
+\r
+${JSON.stringify(metadata)}\r
+--${boundary}\r
+Content-Type: ${mediaType}\r
+\r
+`;
+    const post = `\r
+--${boundary}--`;
+    const body = new Blob([pre, blob, post]);
+    const resp = await driveFetch("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id", {
+      method: "POST",
+      headers: { "Content-Type": `multipart/related; boundary=${boundary}` },
+      body
+    });
+    const data = await resp.json();
+    return data.id;
+  }
+  async function descargarFoto(fileId) {
+    const resp = await driveFetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`);
+    const blob = await resp.blob();
+    return URL.createObjectURL(blob);
+  }
+  async function borrarFoto(fileId) {
+    try {
+      await driveFetch(`https://www.googleapis.com/drive/v3/files/${fileId}`, { method: "DELETE" });
+    } catch (e) {
+    }
   }
   function saveLocalCache(data) {
     try {
@@ -21832,132 +21961,1774 @@ ${JSON.stringify(initialData)}\r
   }
   function loadLocalCache() {
     try {
-      return JSON.parse(localStorage.getItem("taller_jhb_cache") || "{}");
+      return JSON.parse(localStorage.getItem("taller_jhb_cache") || "null");
     } catch (e) {
-      return {};
+      return null;
     }
   }
-  var uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  function compressImage(file, maxWidth = 900, quality = 0.62) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const scale = Math.min(1, maxWidth / img.width);
+          const canvas = document.createElement("canvas");
+          canvas.width = Math.max(1, Math.round(img.width * scale));
+          canvas.height = Math.max(1, Math.round(img.height * scale));
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL("image/jpeg", quality));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+  async function leerTextoDeImagen(dataUrl, onProgress) {
+    if (!window.Tesseract) throw new Error("Tesseract todav\xEDa no carg\xF3 (revis\xE1 tu conexi\xF3n a internet).");
+    const { data } = await window.Tesseract.recognize(dataUrl, "eng", {
+      logger: (m) => {
+        if (onProgress && m.status === "recognizing text") onProgress(Math.round(m.progress * 100));
+      }
+    });
+    return data.text || "";
+  }
+  function extraerCodigosDeTexto(texto) {
+    const matches = texto.toUpperCase().match(/\b[PBCU]0?[0-9A-F]{3,4}\b/g) || [];
+    return Array.from(new Set(matches));
+  }
+  function calcFicha(ficha) {
+    const monto = Number(ficha.montoTrabajo) || 0;
+    const iva = ficha.facturaA ? monto * IVA_RATE : 0;
+    const total = monto + iva;
+    const pagado = (ficha.pagos || []).reduce((s, p) => s + (Number(p.monto) || 0), 0);
+    const saldo = Math.max(0, total - pagado);
+    const costoRepuestos = (ficha.repuestosUsados || []).reduce((s, r) => s + (Number(r.cantidad) || 0) * (Number(r.costoUnitario) || 0), 0);
+    const gastos = (ficha.gastos || []).reduce((s, g) => s + (Number(g.monto) || 0), 0);
+    const ganancia = monto - costoRepuestos - gastos;
+    return { monto, iva, total, pagado, saldo, costoRepuestos, gastos, ganancia };
+  }
+  function Field({ label, children, hint }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { className: "field", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "field-label", children: label }),
+      children,
+      hint && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "field-hint", children: hint })
+    ] });
+  }
+  function Modal({ title, onClose, children, wide }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "modal-overlay", onMouseDown: (e) => {
+      if (e.target === e.currentTarget) onClose();
+    }, children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: `modal-box ${wide ? "wide" : ""}`, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "modal-head", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: title }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "icon-btn", onClick: onClose, children: "\u2715" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "modal-body", children })
+    ] }) });
+  }
+  function Badge({ estado }) {
+    const e = ESTADOS.find((x) => x.v === estado) || ESTADOS[0];
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "led-badge", style: { "--led": e.c }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {}),
+      " ",
+      e.l
+    ] });
+  }
+  function EmptyState({ text }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "empty-state", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: text }) });
+  }
+  function CheckList({ options, selected, onToggle }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "check-list", children: options.map((opt) => {
+      const on = (selected || []).includes(opt);
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { className: `check-chip ${on ? "on" : ""}`, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "checkbox", checked: on, onChange: () => onToggle(opt) }),
+        opt
+      ] }, opt);
+    }) });
+  }
   function App() {
-    const [status, setStatus] = (0, import_react.useState)("inicio");
+    const [authStatus, setAuthStatus] = (0, import_react.useState)("inicio");
     const [errorMsg, setErrorMsg] = (0, import_react.useState)("");
     const [fileId, setFileId] = (0, import_react.useState)(null);
-    const [data, setData] = (0, import_react.useState)({ clientes: {} });
     const [online, setOnline] = (0, import_react.useState)(navigator.onLine);
-    const [nombre, setNombre] = (0, import_react.useState)("");
-    const [ciudad, setCiudad] = (0, import_react.useState)("");
-    const [telefono, setTelefono] = (0, import_react.useState)("");
+    const [tab, setTab] = (0, import_react.useState)("nueva_ficha");
+    const [saving, setSaving] = (0, import_react.useState)(false);
+    const [clientes, setClientesState] = (0, import_react.useState)({});
+    const [vehiculos, setVehiculosState] = (0, import_react.useState)({});
+    const [repuestos, setRepuestosState] = (0, import_react.useState)({});
+    const [fichas, setFichasState] = (0, import_react.useState)({});
+    const [config, setConfigState] = (0, import_react.useState)({ tarifaViaticoKm: "" });
+    const [codigosDict, setCodigosDictState] = (0, import_react.useState)(CODIGOS_SEED);
+    const dbRef = (0, import_react.useRef)({ clientes: {}, vehiculos: {}, repuestos: {}, fichas: {}, config: {}, codigosDict: {} });
     (0, import_react.useEffect)(() => {
       const cached = loadLocalCache();
-      if (cached && cached.clientes) setData(cached);
+      if (cached) aplicarDb(cached);
       const onOnline = () => setOnline(true);
       const onOffline = () => setOnline(false);
       window.addEventListener("online", onOnline);
       window.addEventListener("offline", onOffline);
-      if (localStorage.getItem("taller_jhb_last_login") === "1") {
-        conectar(false);
-      }
+      if (localStorage.getItem("taller_jhb_last_login") === "1") conectar(false);
       return () => {
         window.removeEventListener("online", onOnline);
         window.removeEventListener("offline", onOffline);
       };
     }, []);
+    function aplicarDb(db) {
+      const full = { clientes: {}, vehiculos: {}, repuestos: {}, fichas: {}, config: { tarifaViaticoKm: "" }, codigosDict: CODIGOS_SEED, ...db };
+      dbRef.current = full;
+      setClientesState(full.clientes);
+      setVehiculosState(full.vehiculos);
+      setRepuestosState(full.repuestos);
+      setFichasState(full.fichas);
+      setConfigState(full.config);
+      setCodigosDictState({ ...CODIGOS_SEED, ...full.codigosDict });
+    }
     const conectar = (0, import_react.useCallback)(async (interactive) => {
-      setStatus("conectando");
+      setAuthStatus("conectando");
       setErrorMsg("");
       try {
         await ensureAuth(interactive);
         const id = await getOrCreateDb();
         setFileId(id);
-        const remote = await readDbFile(id);
-        const merged = { clientes: {}, ...remote };
-        setData(merged);
-        saveLocalCache(merged);
-        setStatus("listo");
+        const remote = await readJsonFile(id);
+        aplicarDb(remote);
+        saveLocalCache(dbRef.current);
+        setAuthStatus("listo");
       } catch (e) {
-        setStatus("error");
+        setAuthStatus("error");
         setErrorMsg(e.message || String(e));
       }
     }, []);
-    async function guardar(nuevaData) {
-      setData(nuevaData);
-      saveLocalCache(nuevaData);
-      if (fileId && online) {
+    const persistTimer = (0, import_react.useRef)(null);
+    function persistir(patch) {
+      dbRef.current = { ...dbRef.current, ...patch };
+      saveLocalCache(dbRef.current);
+      if (patch.clientes) setClientesState(patch.clientes);
+      if (patch.vehiculos) setVehiculosState(patch.vehiculos);
+      if (patch.repuestos) setRepuestosState(patch.repuestos);
+      if (patch.fichas) setFichasState(patch.fichas);
+      if (patch.config) setConfigState(patch.config);
+      if (patch.codigosDict) setCodigosDictState(patch.codigosDict);
+      if (!fileId || !online) return;
+      setSaving(true);
+      clearTimeout(persistTimer.current);
+      persistTimer.current = setTimeout(async () => {
         try {
-          await writeDbFile(fileId, nuevaData);
+          await writeJsonFile(fileId, dbRef.current);
         } catch (e) {
-          setErrorMsg("No se pudo sincronizar con Drive (guardado localmente): " + e.message);
+          setErrorMsg("No se pudo sincronizar con Drive (se guard\xF3 localmente): " + e.message);
+        } finally {
+          setSaving(false);
         }
-      }
+      }, 600);
     }
-    function agregarCliente(e) {
-      e.preventDefault();
-      if (!nombre.trim()) return;
-      const id = uid();
-      const nuevaData = { ...data, clientes: { ...data.clientes, [id]: { id, nombre, ciudad, telefono } } };
-      guardar(nuevaData);
-      setNombre("");
-      setCiudad("");
-      setTelefono("");
+    const persist = {
+      clientes: (obj) => persistir({ clientes: obj }),
+      vehiculos: (obj) => persistir({ vehiculos: obj }),
+      repuestos: (obj) => persistir({ repuestos: obj }),
+      fichas: (obj) => persistir({ fichas: obj }),
+      config: (obj) => persistir({ config: obj }),
+      codigosDict: (obj) => persistir({ codigosDict: obj })
+    };
+    const pendientesStock = Object.values(repuestos).filter((r) => Number(r.cantidad) <= 0).length;
+    const vencidas = Object.values(fichas).filter((f) => {
+      const { saldo } = calcFicha(f);
+      return saldo > 0 && f.vencimiento && f.vencimiento < today();
+    }).length;
+    if (authStatus !== "listo") {
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "app", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: CSS }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "login-screen", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "brand", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "jhb", children: "JHB" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "tag", children: [
+              "Electronic &",
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
+              "Performance"
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card", style: { maxWidth: 420 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Conectar con Google Drive" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "dim", children: "Tus datos se guardan en tu propio Drive \u2014 privados, y sincronizados entre tus dispositivos." }),
+            authStatus === "error" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "error-box", children: [
+              "\u26A0\uFE0F ",
+              errorMsg
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary block", onClick: () => conectar(true), disabled: authStatus === "conectando", children: authStatus === "conectando" ? "Conectando\u2026" : "Conectar con Google" }),
+            GOOGLE_CLIENT_ID.includes("TU_CLIENT_ID_ACA") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "warn-box", children: "\u26A0\uFE0F Falta configurar tu Client ID de Google en el c\xF3digo." })
+          ] })
+        ] })
+      ] });
     }
-    function borrarCliente(id) {
-      const clientes = { ...data.clientes };
-      delete clientes[id];
-      guardar({ ...data, clientes });
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "wrap", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "jhb", children: "JHB" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "tag", children: [
-          "Electronic &",
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
-          "Performance"
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "app", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: CSS }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", { className: "topbar", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "brand", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "jhb", children: "JHB" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "tag", children: [
+            "Electronic &",
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
+            "Performance"
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", { className: "tabs", children: TABS.map((t) => {
+          const badge = t.v === "repuestos" && pendientesStock ? pendientesStock : t.v === "fichas" && vencidas ? vencidas : null;
+          return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { className: `tab ${tab === t.v ? "active" : ""}`, onClick: () => setTab(t.v), children: [
+            t.l,
+            badge ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "tab-dot", children: badge }) : null
+          ] }, t.v);
+        }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "status-mini", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `dot ${online ? "ok" : "off"}` }),
+          " ",
+          saving ? "Guardando\u2026" : online ? "Sincronizado" : "Offline"
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "status-bar", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `dot ${online ? "ok" : "off"}` }),
-        " ",
-        online ? "Con conexi\xF3n" : "Sin conexi\xF3n (modo offline)"
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { className: "content", children: [
+        tab === "nueva_ficha" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          NuevaFichaTab,
+          {
+            fichas,
+            setFichas: persist.fichas,
+            clientes,
+            vehiculos,
+            repuestos,
+            setRepuestos: persist.repuestos,
+            setClientes: persist.clientes,
+            setVehiculos: persist.vehiculos,
+            config,
+            setConfig: persist.config,
+            codigosDict,
+            onCreated: () => setTab("tablero")
+          }
+        ),
+        tab === "tablero" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          TableroTab,
+          {
+            fichas,
+            setFichas: persist.fichas,
+            clientes,
+            vehiculos,
+            repuestos,
+            setRepuestos: persist.repuestos,
+            setClientes: persist.clientes,
+            setVehiculos: persist.vehiculos,
+            config,
+            setConfig: persist.config,
+            codigosDict
+          }
+        ),
+        tab === "fichas" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+          FichasTab,
+          {
+            fichas,
+            setFichas: persist.fichas,
+            clientes,
+            vehiculos,
+            repuestos,
+            setRepuestos: persist.repuestos,
+            setClientes: persist.clientes,
+            setVehiculos: persist.vehiculos,
+            config,
+            setConfig: persist.config,
+            codigosDict
+          }
+        ),
+        tab === "clientes" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClientesTab, { clientes, setClientes: persist.clientes, vehiculos, fichas }),
+        tab === "vehiculos" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VehiculosTab, { vehiculos, setVehiculos: persist.vehiculos, clientes, fichas }),
+        tab === "repuestos" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RepuestosTab, { repuestos, setRepuestos: persist.repuestos }),
+        tab === "estadisticas" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EstadisticasTab, { fichas, vehiculos }),
+        tab === "importar" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ImportarTab, { clientes, setClientes: persist.clientes, fichas, setFichas: persist.fichas }),
+        tab === "codigos" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CodigosTab, { codigosDict, setCodigosDict: persist.codigosDict })
+      ] })
+    ] });
+  }
+  function ClientesTab({ clientes, setClientes, vehiculos, fichas }) {
+    const [editing, setEditing] = (0, import_react.useState)(null);
+    const [q, setQ] = (0, import_react.useState)("");
+    const list = Object.values(clientes).filter((c) => c.nombre.toLowerCase().includes(q.toLowerCase()));
+    function save(c) {
+      const id = c.id || uid();
+      setClientes({ ...clientes, [id]: { ...c, id } });
+      setEditing(null);
+    }
+    function remove(id) {
+      if (!confirm("\xBFEliminar este cliente?")) return;
+      const cp = { ...clientes };
+      delete cp[id];
+      setClientes(cp);
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stack", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "toolbar", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "search", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Buscar cliente\u2026", value: q, onChange: (e) => setQ(e.target.value) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary", onClick: () => setEditing({}), children: "+ Nuevo cliente" })
       ] }),
-      status !== "listo" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Conectar con Google Drive" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "dim", children: "Tus datos se guardan en tu propio Drive \u2014 privados, sincronizados entre tus dispositivos." }),
-        status === "error" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "error-box", children: [
-          "\u26A0\uFE0F ",
-          errorMsg
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary", onClick: () => conectar(true), disabled: status === "conectando", children: status === "conectando" ? "Conectando\u2026" : "Conectar con Google" }),
-        GOOGLE_CLIENT_ID.includes("286258665-bqh23vpr4peaje2o684l4cp6np6nsnbf") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "warn-box", children: "\u26A0\uFE0F Todav\xEDa no configuraste tu Client ID de Google en el c\xF3digo (variable GOOGLE_CLIENT_ID). Sin eso, el login no va a funcionar." })
+      list.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyState, { text: "No hay clientes cargados todav\xEDa." }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "grid-cards", children: list.map((c) => {
+        const nVeh = Object.values(vehiculos).filter((v) => v.clienteId === c.id).length;
+        const nFic = Object.values(fichas).filter((f) => f.clienteId === c.id).length;
+        return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-head", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: c.nombre }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-actions", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "icon-btn", onClick: () => setEditing(c), children: "\u270E" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "icon-btn danger", onClick: () => remove(c.id), children: "\u{1F5D1}" })
+            ] })
+          ] }),
+          c.telefono && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-line", children: [
+            "\u{1F4DE} ",
+            c.telefono
+          ] }),
+          c.ciudad && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-line", children: [
+            "\u{1F4CD} ",
+            c.ciudad
+          ] }),
+          c.cuitDni && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-line mono", children: [
+            "CUIT/DNI: ",
+            c.cuitDni
+          ] }),
+          c.notas && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "card-line dim", children: c.notas }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-foot", children: [
+            nVeh,
+            " veh\xEDculo(s) \xB7 ",
+            nFic,
+            " ficha(s)"
+          ] })
+        ] }, c.id);
+      }) }),
+      editing && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Modal, { title: editing.id ? "Editar cliente" : "Nuevo cliente", onClose: () => setEditing(null), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClienteForm, { value: editing, onSave: save }) })
+    ] });
+  }
+  function ClienteForm({ value, onSave }) {
+    const [f, setF] = (0, import_react.useState)({ nombre: "", telefono: "", ciudad: "", cuitDni: "", notas: "", ...value });
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", { className: "form", onSubmit: (e) => {
+      e.preventDefault();
+      if (!f.nombre.trim()) return;
+      onSave(f);
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Nombre *", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { required: true, value: f.nombre, onChange: (e) => setF({ ...f, nombre: e.target.value }) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Ciudad", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: f.ciudad, onChange: (e) => setF({ ...f, ciudad: e.target.value }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Tel\xE9fono", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: f.telefono, onChange: (e) => setF({ ...f, telefono: e.target.value }) }) })
       ] }),
-      status === "listo" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Clientes \u2014 prueba de guardado" }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "dim", children: "Esto es el cimiento probado: carg\xE1 un cliente, recarg\xE1 la p\xE1gina, y confirm\xE1 que sigue ah\xED (viene de tu Drive)." }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", { onSubmit: agregarCliente, className: "form-row", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Nombre", value: nombre, onChange: (e) => setNombre(e.target.value) }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Ciudad", value: ciudad, onChange: (e) => setCiudad(e.target.value) }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Tel\xE9fono", value: telefono, onChange: (e) => setTelefono(e.target.value) }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary", type: "submit", children: "Agregar" })
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "CUIT / DNI", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: f.cuitDni, onChange: (e) => setF({ ...f, cuitDni: e.target.value }) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Notas", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", { rows: 2, value: f.notas, onChange: (e) => setF({ ...f, notas: e.target.value }) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary block", type: "submit", children: "Guardar" })
+    ] });
+  }
+  function VehiculosTab({ vehiculos, setVehiculos, clientes, fichas }) {
+    const [editing, setEditing] = (0, import_react.useState)(null);
+    const [q, setQ] = (0, import_react.useState)("");
+    const [filtroTipo, setFiltroTipo] = (0, import_react.useState)("");
+    const list = Object.values(vehiculos).filter((v) => {
+      const txt = `${v.marca} ${v.modelo} ${v.patente}`.toLowerCase();
+      return txt.includes(q.toLowerCase()) && (!filtroTipo || v.tipo === filtroTipo);
+    });
+    function save(v) {
+      const id = v.id || uid();
+      setVehiculos({ ...vehiculos, [id]: { ...v, id } });
+      setEditing(null);
+    }
+    function remove(id) {
+      if (!confirm("\xBFEliminar este veh\xEDculo?")) return;
+      const cp = { ...vehiculos };
+      delete cp[id];
+      setVehiculos(cp);
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stack", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "toolbar", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "search", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Buscar marca, modelo o patente\u2026", value: q, onChange: (e) => setQ(e.target.value) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { value: filtroTipo, onChange: (e) => setFiltroTipo(e.target.value), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "Todos los tipos" }),
+          TIPOS_VEHICULO.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: t, children: t }, t))
         ] }),
-        errorMsg && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "error-box", children: [
-          "\u26A0\uFE0F ",
-          errorMsg
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", { className: "lista", children: [
-          Object.values(data.clientes).map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: c.nombre }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary", onClick: () => setEditing({}), children: "+ Nuevo veh\xEDculo" })
+      ] }),
+      list.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyState, { text: "No hay veh\xEDculos que coincidan." }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "grid-cards", children: list.map((v) => {
+        const cliente = clientes[v.clienteId];
+        const nFic = Object.values(fichas).filter((f) => f.vehiculoId === v.id).length;
+        return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-head", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { children: [
+              v.marca,
               " ",
-              c.ciudad && `\xB7 ${c.ciudad}`,
+              v.modelo,
               " ",
-              c.telefono && `\xB7 ${c.telefono}`
+              v.anio ? `\xB7 ${v.anio}` : ""
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "del", onClick: () => borrarCliente(c.id), children: "\u2715" })
-          ] }, c.id)),
-          Object.keys(data.clientes).length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { className: "dim", children: "Sin clientes todav\xEDa." })
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-actions", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "icon-btn", onClick: () => setEditing(v), children: "\u270E" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "icon-btn danger", onClick: () => remove(v.id), children: "\u{1F5D1}" })
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "card-line mono", children: v.patente || "sin patente" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "card-line", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "chip", children: v.tipo }) }),
+          v.horometroKm && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-line dim", children: [
+            "Hor\xF3metro/Km: ",
+            v.horometroKm
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-line dim", children: [
+            "Cliente: ",
+            cliente ? cliente.nombre : "\u2014 sin asignar \u2014"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card-foot", children: [
+            nFic,
+            " ficha(s) en su historial"
+          ] })
+        ] }, v.id);
+      }) }),
+      editing && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Modal, { title: editing.id ? "Editar veh\xEDculo" : "Nuevo veh\xEDculo", onClose: () => setEditing(null), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VehiculoForm, { value: editing, onSave: save, clientes }) })
+    ] });
+  }
+  function VehiculoForm({ value, onSave, clientes }) {
+    const [f, setF] = (0, import_react.useState)({ marca: "", modelo: "", anio: "", patente: "", tipo: TIPOS_VEHICULO[0], horometroKm: "", clienteId: "", notas: "", ...value });
+    const clienteList = Object.values(clientes).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", { className: "form", onSubmit: (e) => {
+      e.preventDefault();
+      onSave(f);
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Cliente", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { value: f.clienteId, onChange: (e) => setF({ ...f, clienteId: e.target.value }), children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "\u2014 sin asignar \u2014" }),
+        clienteList.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: c.id, children: c.nombre }, c.id))
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Marca", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: f.marca, onChange: (e) => setF({ ...f, marca: e.target.value }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Modelo", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: f.modelo, onChange: (e) => setF({ ...f, modelo: e.target.value }) }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "A\xF1o", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: f.anio, onChange: (e) => setF({ ...f, anio: e.target.value }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Patente/Dominio", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: f.patente, onChange: (e) => setF({ ...f, patente: e.target.value.toUpperCase() }) }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Tipo", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", { value: f.tipo, onChange: (e) => setF({ ...f, tipo: e.target.value }), children: TIPOS_VEHICULO.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: t, children: t }, t)) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Hor\xF3metro / Km", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: f.horometroKm, onChange: (e) => setF({ ...f, horometroKm: e.target.value }) }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Notas", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", { rows: 2, value: f.notas, onChange: (e) => setF({ ...f, notas: e.target.value }) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary block", type: "submit", children: "Guardar" })
+    ] });
+  }
+  function RepuestosTab({ repuestos, setRepuestos }) {
+    const [editing, setEditing] = (0, import_react.useState)(null);
+    const pendientes = Object.values(repuestos).filter((r) => Number(r.cantidad) <= 0);
+    function save(r) {
+      const id = r.id || uid();
+      setRepuestos({ ...repuestos, [id]: { ...r, id } });
+      setEditing(null);
+    }
+    function remove(id) {
+      if (!confirm("\xBFEliminar este repuesto?")) return;
+      const cp = { ...repuestos };
+      delete cp[id];
+      setRepuestos(cp);
+    }
+    function ajustar(id, delta) {
+      const r = repuestos[id];
+      setRepuestos({ ...repuestos, [id]: { ...r, cantidad: Math.max(0, (Number(r.cantidad) || 0) + delta) } });
+    }
+    const list = Object.values(repuestos).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stack", children: [
+      pendientes.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "alert-box", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { children: [
+          "Pedidos pendientes de reponer (",
+          pendientes.length,
+          ")"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "pending-list", children: pendientes.map((r) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "chip warn", children: [
+          r.nombre,
+          r.codigo ? ` (${r.codigo})` : "",
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => ajustar(r.id, 1), children: " +1" })
+        ] }, r.id)) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "toolbar", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Stock de repuestos" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary", onClick: () => setEditing({}), children: "+ Nuevo repuesto" })
+      ] }),
+      list.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyState, { text: "Todav\xEDa no cargaste repuestos en stock." }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", { className: "table", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Nombre" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "C\xF3digo" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Cantidad" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Costo unit." }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Valor stock" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {})
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: list.map((r) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { className: Number(r.cantidad) <= 0 ? "row-warn" : "", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: r.nombre }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "mono dim", children: r.codigo || "\u2014" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stepper", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => ajustar(r.id, -1), children: "\u2212" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: r.cantidad }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { onClick: () => ajustar(r.id, 1), children: "+" })
+          ] }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: money(r.costoUnitario) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: money((Number(r.cantidad) || 0) * (Number(r.costoUnitario) || 0)) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { className: "row-actions", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "icon-btn", onClick: () => setEditing(r), children: "\u270E" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "icon-btn danger", onClick: () => remove(r.id), children: "\u{1F5D1}" })
+          ] })
+        ] }, r.id)) })
+      ] }),
+      editing && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Modal, { title: editing.id ? "Editar repuesto" : "Nuevo repuesto", onClose: () => setEditing(null), children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RepuestoForm, { value: editing, onSave: save }) })
+    ] });
+  }
+  function RepuestoForm({ value, onSave }) {
+    const [f, setF] = (0, import_react.useState)({ nombre: "", codigo: "", cantidad: 0, costoUnitario: 0, ...value });
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", { className: "form", onSubmit: (e) => {
+      e.preventDefault();
+      if (!f.nombre.trim()) return;
+      onSave(f);
+    }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Nombre *", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { required: true, value: f.nombre, onChange: (e) => setF({ ...f, nombre: e.target.value }) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "C\xF3digo de pieza", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: f.codigo, onChange: (e) => setF({ ...f, codigo: e.target.value }) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Cantidad en stock", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "number", value: f.cantidad, onChange: (e) => setF({ ...f, cantidad: e.target.value }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Costo unitario", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "number", value: f.costoUnitario, onChange: (e) => setF({ ...f, costoUnitario: e.target.value }) }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary block", type: "submit", children: "Guardar" })
+    ] });
+  }
+  function CodigosTab({ codigosDict, setCodigosDict }) {
+    const [q, setQ] = (0, import_react.useState)("");
+    const [nuevoCodigo, setNuevoCodigo] = (0, import_react.useState)("");
+    const [nuevaDesc, setNuevaDesc] = (0, import_react.useState)("");
+    const entries = Object.entries(codigosDict).filter(([c, d]) => c.toLowerCase().includes(q.toLowerCase()) || d.toLowerCase().includes(q.toLowerCase())).sort((a, b) => a[0].localeCompare(b[0]));
+    function agregar(e) {
+      e.preventDefault();
+      if (!nuevoCodigo.trim() || !nuevaDesc.trim()) return;
+      setCodigosDict({ ...codigosDict, [nuevoCodigo.trim().toUpperCase()]: nuevaDesc.trim() });
+      setNuevoCodigo("");
+      setNuevaDesc("");
+    }
+    function borrar(c) {
+      const cp = { ...codigosDict };
+      delete cp[c];
+      setCodigosDict(cp);
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stack", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "toolbar", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Diccionario de c\xF3digos" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "search", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Buscar c\xF3digo o descripci\xF3n\u2026", value: q, onChange: (e) => setQ(e.target.value) }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", { className: "form-row", onSubmit: agregar, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "C\xF3digo (ej: P0301)", value: nuevoCodigo, onChange: (e) => setNuevoCodigo(e.target.value), style: { maxWidth: 140 } }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Descripci\xF3n / causa", value: nuevaDesc, onChange: (e) => setNuevaDesc(e.target.value) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary", type: "submit", children: "Agregar" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", { className: "table", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "C\xF3digo" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Descripci\xF3n" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {})
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: entries.map(([c, d]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "mono", children: c }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: d }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "icon-btn danger", onClick: () => borrar(c), children: "\u{1F5D1}" }) })
+        ] }, c)) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "dim", children: "Esta tabla es tuya: los c\xF3digos gen\xE9ricos vienen precargados, y cada vez que encuentres uno nuevo espec\xEDfico de una marca lo agreg\xE1s ac\xE1 para que quede disponible siempre." })
+    ] });
+  }
+  function FichasTab({ fichas, setFichas, clientes, vehiculos, repuestos, setRepuestos, setClientes, setVehiculos, config, setConfig, codigosDict }) {
+    const [editingId, setEditingId] = (0, import_react.useState)(null);
+    const [q, setQ] = (0, import_react.useState)("");
+    const [fTipo, setFTipo] = (0, import_react.useState)("");
+    const [fCategoria, setFCategoria] = (0, import_react.useState)("");
+    const [fEstado, setFEstado] = (0, import_react.useState)("");
+    const [soloVencidas, setSoloVencidas] = (0, import_react.useState)(false);
+    const list = (0, import_react.useMemo)(() => {
+      return Object.values(fichas).filter((f) => {
+        const v = vehiculos[f.vehiculoId];
+        const c = clientes[f.clienteId];
+        const txt = `${v ? v.marca + " " + v.modelo + " " + v.patente : ""} ${c ? c.nombre : ""} ${f.sintoma || ""} ${f.diagnostico || ""} ${(f.codigosError || []).join(" ")}`.toLowerCase();
+        if (q && !txt.includes(q.toLowerCase())) return false;
+        if (fTipo && (!v || v.tipo !== fTipo)) return false;
+        if (fCategoria && !(f.categoriasFalla || []).includes(fCategoria)) return false;
+        if (fEstado && f.estado !== fEstado) return false;
+        if (soloVencidas) {
+          const { saldo } = calcFicha(f);
+          if (!(saldo > 0 && f.vencimiento && f.vencimiento < today())) return false;
+        }
+        return true;
+      }).sort((a, b) => (b.fechaIngreso || "").localeCompare(a.fechaIngreso || ""));
+    }, [fichas, vehiculos, clientes, q, fTipo, fCategoria, fEstado, soloVencidas]);
+    function saveFicha(ficha) {
+      const id = ficha.id || uid();
+      setFichas({ ...fichas, [id]: { ...ficha, id } });
+      setEditingId(null);
+    }
+    function removeFicha(id) {
+      if (!confirm("\xBFEliminar esta ficha?")) return;
+      const cp = { ...fichas };
+      delete cp[id];
+      setFichas(cp);
+    }
+    const editingFicha = editingId === "new" ? {} : editingId ? fichas[editingId] : null;
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stack", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "toolbar wrap", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "search", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Buscar veh\xEDculo, cliente, falla, c\xF3digo\u2026", value: q, onChange: (e) => setQ(e.target.value) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { value: fTipo, onChange: (e) => setFTipo(e.target.value), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "Tipo de veh\xEDculo" }),
+          TIPOS_VEHICULO.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: t, children: t }, t))
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { value: fCategoria, onChange: (e) => setFCategoria(e.target.value), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "Tipo de falla" }),
+          CATEGORIAS_FALLA.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: t, children: t }, t))
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { value: fEstado, onChange: (e) => setFEstado(e.target.value), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "Estado" }),
+          ESTADOS.map((e) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: e.v, children: e.l }, e.v))
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { className: "checkbox-inline", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "checkbox", checked: soloVencidas, onChange: (e) => setSoloVencidas(e.target.checked) }),
+          " Solo vencidas"
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary", onClick: () => setEditingId("new"), children: "+ Nueva ficha" })
+      ] }),
+      list.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyState, { text: "No hay fichas que coincidan." }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "fichas-list", children: list.map((f) => {
+        const v = vehiculos[f.vehiculoId];
+        const c = clientes[f.clienteId];
+        const { saldo } = calcFicha(f);
+        const isVencida = saldo > 0 && f.vencimiento && f.vencimiento < today();
+        return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: `ficha-row ${isVencida ? "vencida" : ""}`, onClick: () => setEditingId(f.id), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "ficha-main", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("strong", { children: [
+              v ? `${v.marca} ${v.modelo}` : "Veh\xEDculo sin datos",
+              " ",
+              v?.patente ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "mono dim", children: [
+                "\xB7 ",
+                v.patente
+              ] }) : ""
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "dim", children: c ? c.nombre : "sin cliente" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "ficha-mid", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "chip-row", children: (f.categoriasFalla || []).length ? f.categoriasFalla.map((cc) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "chip", children: cc }, cc)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "chip", children: "Sin categorizar" }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "dim ellipsis", children: f.sintoma })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "ficha-side", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "dim", children: fmtDate(f.fechaIngreso) }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, { estado: f.estado }),
+            saldo > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: `saldo ${isVencida ? "danger" : ""}`, children: [
+              "Saldo: ",
+              money(saldo)
+            ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "saldo ok", children: "Pagado" })
+          ] })
+        ] }, f.id);
+      }) }),
+      editingFicha !== null && editingFicha !== void 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Modal, { title: editingFicha.id ? "Ficha de trabajo" : "Nueva ficha de trabajo", onClose: () => setEditingId(null), wide: true, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        FichaForm,
+        {
+          value: editingFicha,
+          onSave: saveFicha,
+          onDelete: editingFicha.id ? () => {
+            removeFicha(editingFicha.id);
+            setEditingId(null);
+          } : null,
+          clientes,
+          vehiculos,
+          repuestos,
+          setRepuestos,
+          setClientes,
+          setVehiculos,
+          todasLasFichas: fichas,
+          config,
+          setConfig,
+          codigosDict
+        }
+      ) })
+    ] });
+  }
+  function FichaForm({ value, onSave, onDelete, clientes, vehiculos, repuestos, setRepuestos, setClientes, setVehiculos, todasLasFichas, config, setConfig, codigosDict }) {
+    const [f, setF] = (0, import_react.useState)({
+      fechaIngreso: today(),
+      fechaEntrega: "",
+      fechaCobro: "",
+      vencimiento: addDays(today(), 30),
+      clienteId: "",
+      vehiculoId: "",
+      estado: "ingresado",
+      categoriasFalla: [],
+      subtiposReprogramacion: [],
+      sintoma: "",
+      diagnostico: "",
+      solucion: "",
+      notas: "",
+      codigosError: [],
+      fotos: [],
+      repuestosUsados: [],
+      montoTrabajo: "",
+      facturaA: false,
+      formaPago: FORMAS_PAGO[0],
+      gastos: [],
+      pagos: [],
+      ...value
+    });
+    const [fotoUrls, setFotoUrls] = (0, import_react.useState)({});
+    const [analizando, setAnalizando] = (0, import_react.useState)(false);
+    const [ocrProgreso, setOcrProgreso] = (0, import_react.useState)(0);
+    const [ocrResult, setOcrResult] = (0, import_react.useState)(null);
+    const [grabando, setGrabando] = (0, import_react.useState)(false);
+    const recognitionRef = (0, import_react.useRef)(null);
+    const [quickClient, setQuickClient] = (0, import_react.useState)(false);
+    const [quickVehicle, setQuickVehicle] = (0, import_react.useState)(false);
+    (0, import_react.useEffect)(() => {
+      (async () => {
+        const entries = {};
+        for (const fileId of f.fotos || []) {
+          try {
+            entries[fileId] = await descargarFoto(fileId);
+          } catch (e) {
+            entries[fileId] = null;
+          }
+        }
+        setFotoUrls(entries);
+      })();
+    }, []);
+    const calc = calcFicha(f);
+    const clienteList = Object.values(clientes).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    const vehiculosDelCliente = Object.values(vehiculos).filter((v) => !f.clienteId || v.clienteId === f.clienteId);
+    const repuestoList = Object.values(repuestos).sort((a, b) => a.nombre.localeCompare(b.nombre));
+    const historialVehiculo = (0, import_react.useMemo)(() => {
+      if (!f.vehiculoId) return [];
+      return Object.values(todasLasFichas).filter((x) => x.vehiculoId === f.vehiculoId && x.id !== f.id).sort((a, b) => (b.fechaIngreso || "").localeCompare(a.fechaIngreso || "")).map((x) => ({ fecha: fmtDate(x.fechaIngreso), codigos: x.codigosError || [], diagnostico: x.diagnostico, solucion: x.solucion }));
+    }, [f.vehiculoId, todasLasFichas, f.id]);
+    async function handleFotoUpload(e) {
+      const files = Array.from(e.target.files || []);
+      for (const file of files) {
+        const compressed = await compressImage(file);
+        try {
+          const fileId = await subirFoto(compressed, `foto_${f.id || "tmp"}_${uid()}.jpg`);
+          setF((prev) => ({ ...prev, fotos: [...prev.fotos || [], fileId] }));
+          setFotoUrls((prev) => ({ ...prev, [fileId]: compressed }));
+        } catch (err) {
+          alert("No se pudo subir la foto a Drive: " + err.message);
+        }
+      }
+      e.target.value = "";
+    }
+    async function removeFoto(fileId) {
+      await borrarFoto(fileId);
+      setF((prev) => ({ ...prev, fotos: prev.fotos.filter((k) => k !== fileId) }));
+    }
+    async function leerCodigoLocal(fileId) {
+      setAnalizando(true);
+      setOcrResult(null);
+      setOcrProgreso(0);
+      try {
+        const dataUrl = fotoUrls[fileId];
+        const texto = await leerTextoDeImagen(dataUrl, setOcrProgreso);
+        const codigos = extraerCodigosDeTexto(texto);
+        const coincidencias = historialVehiculo.filter((h) => h.codigos.some((c) => codigos.includes(c)));
+        setOcrResult({ codigos, textoCrudo: texto, coincidencias });
+        if (codigos.length) setF((prev) => ({ ...prev, codigosError: Array.from(/* @__PURE__ */ new Set([...prev.codigosError || [], ...codigos])) }));
+      } catch (e) {
+        setOcrResult({ error: e.message });
+      }
+      setAnalizando(false);
+    }
+    function toggleGrabacion() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) {
+        alert("Tu navegador no soporta dictado por voz. Prob\xE1 con Chrome.");
+        return;
+      }
+      if (grabando) {
+        recognitionRef.current && recognitionRef.current.stop();
+        setGrabando(false);
+        return;
+      }
+      const rec = new SR();
+      rec.lang = "es-AR";
+      rec.continuous = true;
+      rec.interimResults = false;
+      rec.onresult = (ev) => {
+        let texto = "";
+        for (let i = ev.resultIndex; i < ev.results.length; i++) if (ev.results[i].isFinal) texto += ev.results[i][0].transcript + " ";
+        if (texto.trim()) setF((prev) => ({ ...prev, notas: (prev.notas ? prev.notas + "\n" : "") + texto.trim() }));
+      };
+      rec.onerror = () => setGrabando(false);
+      rec.onend = () => setGrabando(false);
+      rec.start();
+      recognitionRef.current = rec;
+      setGrabando(true);
+    }
+    function addCodigo(str) {
+      if (!str.trim()) return;
+      setF((prev) => ({ ...prev, codigosError: [...prev.codigosError || [], str.trim().toUpperCase()] }));
+    }
+    function removeCodigo(i) {
+      setF((prev) => ({ ...prev, codigosError: prev.codigosError.filter((_, idx) => idx !== i) }));
+    }
+    function addRepuestoUsado(repuestoId) {
+      const r = repuestos[repuestoId];
+      if (!r) return;
+      if (Number(r.cantidad) <= 0 && !confirm(`"${r.nombre}" figura sin stock. \xBFUsarlo igual?`)) return;
+      setF((prev) => ({ ...prev, repuestosUsados: [...prev.repuestosUsados || [], { repuestoId, nombre: r.nombre, cantidad: 1, costoUnitario: r.costoUnitario }] }));
+    }
+    function updateRepuestoUsado(idx, patch) {
+      setF((prev) => {
+        const arr = [...prev.repuestosUsados];
+        arr[idx] = { ...arr[idx], ...patch };
+        return { ...prev, repuestosUsados: arr };
+      });
+    }
+    function removeRepuestoUsado(idx) {
+      setF((prev) => ({ ...prev, repuestosUsados: prev.repuestosUsados.filter((_, i) => i !== idx) }));
+    }
+    function addPago() {
+      setF((prev) => ({ ...prev, pagos: [...prev.pagos || [], { fecha: today(), monto: "" }] }));
+    }
+    function updatePago(idx, patch) {
+      setF((prev) => {
+        const arr = [...prev.pagos];
+        arr[idx] = { ...arr[idx], ...patch };
+        return { ...prev, pagos: arr };
+      });
+    }
+    function removePago(idx) {
+      setF((prev) => ({ ...prev, pagos: prev.pagos.filter((_, i) => i !== idx) }));
+    }
+    function addGasto() {
+      const tarifa = config?.tarifaViaticoKm || "";
+      setF((prev) => ({ ...prev, gastos: [...prev.gastos || [], { tipo: TIPOS_GASTO[0], descripcion: "", km: "", tarifaKm: tarifa, monto: "" }] }));
+    }
+    function updateGasto(idx, patch) {
+      setF((prev) => {
+        const arr = [...prev.gastos];
+        let g = { ...arr[idx], ...patch };
+        if (g.tipo === "Vi\xE1ticos" && (patch.km !== void 0 || patch.tarifaKm !== void 0)) {
+          const km = Number(g.km) || 0;
+          const tarifa = Number(g.tarifaKm) || 0;
+          g.monto = km && tarifa ? km * tarifa : g.monto;
+        }
+        arr[idx] = g;
+        return { ...prev, gastos: arr };
+      });
+      if (patch.tarifaKm !== void 0 && setConfig && config) setConfig({ ...config, tarifaViaticoKm: patch.tarifaKm });
+    }
+    function removeGasto(idx) {
+      setF((prev) => ({ ...prev, gastos: prev.gastos.filter((_, i) => i !== idx) }));
+    }
+    function handleEstadoChange(nuevoEstado) {
+      setF((prev) => {
+        if (nuevoEstado === prev.estado) return prev;
+        const patch = { estado: nuevoEstado };
+        if (nuevoEstado === "ingresado" || nuevoEstado === "en_proceso") {
+          if (prev.estado === "turno" || !prev.fechaIngreso) {
+            patch.fechaIngreso = today();
+            patch.vencimiento = addDays(today(), 30);
+          }
+        } else if (nuevoEstado === "pendiente_pago") {
+          patch.fechaEntrega = today();
+        } else if (nuevoEstado === "finalizado") {
+          patch.fechaCobro = today();
+          if (!prev.fechaEntrega) patch.fechaEntrega = today();
+        }
+        return { ...prev, ...patch };
+      });
+    }
+    const snapshotInicialRef = (0, import_react.useRef)({
+      fotos: (value.fotos || []).length,
+      diagnostico: value.diagnostico || "",
+      codigosError: (value.codigosError || []).join(","),
+      solucion: value.solucion || "",
+      repuestosUsados: (value.repuestosUsados || []).length
+    });
+    (0, import_react.useEffect)(() => {
+      if (f.estado !== "ingresado") return;
+      const snap = snapshotInicialRef.current;
+      const cambio = (f.fotos || []).length !== snap.fotos || (f.diagnostico || "") !== snap.diagnostico || (f.codigosError || []).join(",") !== snap.codigosError || (f.solucion || "") !== snap.solucion || (f.repuestosUsados || []).length !== snap.repuestosUsados;
+      if (cambio) handleEstadoChange("en_proceso");
+    }, [f.fotos, f.diagnostico, f.codigosError, f.solucion, f.repuestosUsados, f.estado]);
+    function handleSubmit(e) {
+      e.preventDefault();
+      const originalUsados = value.repuestosUsados || [];
+      const nuevos = f.repuestosUsados || [];
+      if (JSON.stringify(originalUsados) !== JSON.stringify(nuevos)) {
+        const stockUpdate = { ...repuestos };
+        const delta = {};
+        originalUsados.forEach((u) => {
+          delta[u.repuestoId] = (delta[u.repuestoId] || 0) + Number(u.cantidad || 0);
+        });
+        nuevos.forEach((u) => {
+          delta[u.repuestoId] = (delta[u.repuestoId] || 0) - Number(u.cantidad || 0);
+        });
+        Object.entries(delta).forEach(([rid, d]) => {
+          if (stockUpdate[rid]) stockUpdate[rid] = { ...stockUpdate[rid], cantidad: Math.max(0, Number(stockUpdate[rid].cantidad || 0) + d) };
+        });
+        setRepuestos(stockUpdate);
+      }
+      onSave(f);
+    }
+    function crearClienteRapido(datos) {
+      if (!datos.nombre || !datos.nombre.trim()) return;
+      const id = uid();
+      setClientes({ ...clientes, [id]: { id, ...datos } });
+      setF((prev) => ({ ...prev, clienteId: id }));
+      setQuickClient(false);
+    }
+    function crearVehiculoRapido(datos) {
+      const id = uid();
+      setVehiculos({ ...vehiculos, [id]: { id, clienteId: f.clienteId, tipo: TIPOS_VEHICULO[0], ...datos } });
+      setF((prev) => ({ ...prev, vehiculoId: id }));
+      setQuickVehicle(false);
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", { className: "form ficha-form", onSubmit: handleSubmit, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Field, { label: "Cliente", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "inline-add", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { value: f.clienteId, onChange: (e) => setF({ ...f, clienteId: e.target.value, vehiculoId: "" }), children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "\u2014 elegir cliente \u2014" }),
+              clienteList.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: c.id, children: c.nombre }, c.id))
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "icon-btn", onClick: () => setQuickClient(true), children: "+" })
+          ] }),
+          quickClient && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QuickCliente, { onAdd: crearClienteRapido, onCancel: () => setQuickClient(false) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Field, { label: "Veh\xEDculo", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "inline-add", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { value: f.vehiculoId, onChange: (e) => setF({ ...f, vehiculoId: e.target.value }), children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "\u2014 elegir veh\xEDculo \u2014" }),
+              vehiculosDelCliente.map((v) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", { value: v.id, children: [
+                v.marca,
+                " ",
+                v.modelo,
+                " ",
+                v.patente ? `(${v.patente})` : ""
+              ] }, v.id))
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "icon-btn", onClick: () => setQuickVehicle(true), children: "+" })
+          ] }),
+          quickVehicle && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QuickVehicle, { onAdd: crearVehiculoRapido, onCancel: () => setQuickVehicle(false) })
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-row three", children: [
+        f.estado === "turno" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Fecha del turno", hint: "Es un turno a futuro: carg\xE1 vos la fecha en que va a venir.", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "date", value: f.fechaIngreso, onChange: (e) => setF({ ...f, fechaIngreso: e.target.value }) }) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Fecha de ingreso", hint: "Se pone sola al entrar al taller.", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "auto-date", children: fmtDate(f.fechaIngreso) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Fecha de entrega", hint: "Se pone sola al marcar 'pend. de pago'.", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "auto-date", children: fmtDate(f.fechaEntrega) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Estado", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", { value: f.estado, onChange: (e) => handleEstadoChange(e.target.value), children: ESTADOS.map((e) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: e.v, children: e.l }, e.v)) }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Tipo de trabajo / falla", hint: "Marc\xE1 todos los que correspondan.", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckList, { options: CATEGORIAS_FALLA, selected: f.categoriasFalla, onToggle: (opt) => setF((prev) => {
+        const has = (prev.categoriasFalla || []).includes(opt);
+        const categoriasFalla = has ? prev.categoriasFalla.filter((x) => x !== opt) : [...prev.categoriasFalla || [], opt];
+        const subtiposReprogramacion = categoriasFalla.includes("Reprogramaci\xF3n") ? prev.subtiposReprogramacion : [];
+        return { ...prev, categoriasFalla, subtiposReprogramacion };
+      }) }) }),
+      (f.categoriasFalla || []).includes("Reprogramaci\xF3n") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "\xBFQu\xE9 hay que reprogramar?", hint: "Marc\xE1 todo lo que vayas a intervenir.", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CheckList, { options: SUBTIPOS_REPROGRAMACION, selected: f.subtiposReprogramacion, onToggle: (opt) => setF((prev) => {
+        const has = (prev.subtiposReprogramacion || []).includes(opt);
+        return { ...prev, subtiposReprogramacion: has ? prev.subtiposReprogramacion.filter((x) => x !== opt) : [...prev.subtiposReprogramacion || [], opt] };
+      }) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "S\xEDntoma / falla reportada", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", { rows: 2, value: f.sintoma, onChange: (e) => setF({ ...f, sintoma: e.target.value }) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "C\xF3digos de error", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "codigo-list", children: [
+        (f.codigosError || []).map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "chip mono", title: codigosDict[c] || "", children: [
+          c,
+          codigosDict[c] ? ` \u2014 ${codigosDict[c]}` : "",
+          " ",
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => removeCodigo(i), children: "\xD7" })
+        ] }, i)),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Escrib\xED un c\xF3digo y Enter", onKeyDown: (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            addCodigo(e.target.value);
+            e.target.value = "";
+          }
+        } })
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Field, { label: "Fotos (scanner / tablero / falla)", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "foto-grid", children: [
+          (f.fotos || []).map((fileId) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "foto-item", children: [
+            fotoUrls[fileId] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: fotoUrls[fileId], alt: "" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "foto-loading", children: "\u2026" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "foto-actions", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => leerCodigoLocal(fileId), disabled: analizando, children: "\u{1F50D} Leer" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => removeFoto(fileId), children: "\u{1F5D1}" })
+            ] })
+          ] }, fileId)),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { className: "foto-upload", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "+ Subir foto" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "file", accept: "image/*", multiple: true, hidden: true, onChange: handleFotoUpload })
+          ] })
+        ] }),
+        analizando && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "ai-box loading", children: [
+          "Leyendo texto de la imagen\u2026 ",
+          ocrProgreso,
+          "%"
+        ] }),
+        ocrResult && !ocrResult.error && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "ai-box", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "C\xF3digo(s) detectado(s):" }),
+            " ",
+            (ocrResult.codigos || []).join(", ") || "ninguno reconocido \u2014 prob\xE1 con m\xE1s luz/foco"
+          ] }),
+          ocrResult.codigos.map((c) => codigosDict[c] && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+            "\xB7 ",
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: c }),
+            ": ",
+            codigosDict[c]
+          ] }, c)),
+          ocrResult.coincidencias && ocrResult.coincidencias.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "ai-match", children: [
+            "Este mismo veh\xEDculo ya tuvo este c\xF3digo: ",
+            ocrResult.coincidencias.map((h, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+              "\xB7 ",
+              h.fecha,
+              ": ",
+              h.diagnostico || "\u2014",
+              " \u2192 ",
+              h.solucion || "\u2014"
+            ] }, i))
+          ] })
+        ] }),
+        ocrResult && ocrResult.error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "ai-box error", children: ocrResult.error })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Diagn\xF3stico", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", { rows: 3, value: f.diagnostico, onChange: (e) => setF({ ...f, diagnostico: e.target.value }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Soluci\xF3n aplicada", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", { rows: 3, value: f.solucion, onChange: (e) => setF({ ...f, solucion: e.target.value }) }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Notas adicionales (pod\xE9s dictar por voz)", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "voice-box", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", { rows: 2, value: f.notas, onChange: (e) => setF({ ...f, notas: e.target.value }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { type: "button", className: `mic-btn ${grabando ? "on" : ""}`, onClick: toggleGrabacion, children: [
+          "\u{1F399} ",
+          grabando ? "Detener" : "Grabar"
+        ] })
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "section-title", children: "Repuestos utilizados" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "repuestos-usados", children: [
+        (f.repuestosUsados || []).map((r, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "repuesto-row", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: r.nombre }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "number", min: "1", value: r.cantidad, onChange: (e) => updateRepuestoUsado(i, { cantidad: e.target.value }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "dim", children: [
+            money(r.costoUnitario),
+            " c/u"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: money((Number(r.cantidad) || 0) * (Number(r.costoUnitario) || 0)) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "icon-btn danger", onClick: () => removeRepuestoUsado(i), children: "\u{1F5D1}" })
+        ] }, i)),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { value: "", onChange: (e) => {
+          if (e.target.value) addRepuestoUsado(e.target.value);
+        }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "", children: "+ agregar repuesto del stock\u2026" }),
+          repuestoList.map((r) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", { value: r.id, children: [
+            r.nombre,
+            " (stock: ",
+            r.cantidad,
+            ")"
+          ] }, r.id))
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "section-title", children: "Costos y pago" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Monto del trabajo", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "number", value: f.montoTrabajo, onChange: (e) => setF({ ...f, montoTrabajo: e.target.value }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Field, { label: "Forma de pago", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", { value: f.formaPago, onChange: (e) => setF({ ...f, formaPago: e.target.value }), children: FORMAS_PAGO.map((fp) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: fp, children: fp }, fp)) }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { className: "checkbox-inline", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "checkbox", checked: f.facturaA, onChange: (e) => setF({ ...f, facturaA: e.target.checked }) }),
+        " Con factura A (suma 21% de IVA autom\xE1ticamente)"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "venc-line", children: [
+        "Vencimiento del cobro: ",
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: fmtDate(f.vencimiento) }),
+        " ",
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "dim", children: "(30 d\xEDas desde el ingreso, autom\xE1tico)" })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "gastos-box", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "pagos-head", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Gastos del trabajo (vi\xE1ticos, combustible, otros)" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "btn small", onClick: addGasto, children: "+ Agregar gasto" })
+        ] }),
+        (f.gastos || []).map((g, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "gasto-row", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", { value: g.tipo, onChange: (e) => updateGasto(i, { tipo: e.target.value }), children: TIPOS_GASTO.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: t, children: t }, t)) }),
+          g.tipo === "Vi\xE1ticos" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "number", placeholder: "Km recorridos", value: g.km, onChange: (e) => updateGasto(i, { km: e.target.value }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "number", placeholder: "$/km", value: g.tarifaKm, onChange: (e) => updateGasto(i, { tarifaKm: e.target.value }) })
+          ] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Descripci\xF3n (opcional)", value: g.descripcion, onChange: (e) => updateGasto(i, { descripcion: e.target.value }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "number", placeholder: "Monto", value: g.monto, onChange: (e) => updateGasto(i, { monto: e.target.value }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "icon-btn danger", onClick: () => removeGasto(i), children: "\u{1F5D1}" })
+        ] }, i)),
+        (f.gastos || []).length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "dim board-empty", children: "Sin gastos cargados en este trabajo." })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "pagos-box", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "pagos-head", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Pagos recibidos" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "btn small", onClick: addPago, children: "+ Agregar pago" })
+        ] }),
+        (f.pagos || []).map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "pago-row", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "date", value: p.fecha, onChange: (e) => updatePago(i, { fecha: e.target.value }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "number", placeholder: "Monto", value: p.monto, onChange: (e) => updatePago(i, { monto: e.target.value }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "icon-btn danger", onClick: () => removePago(i), children: "\u{1F5D1}" })
+        ] }, i))
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "totales-box", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Monto trabajo" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(calc.monto) })
+        ] }),
+        f.facturaA && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "IVA (21%)" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(calc.iva) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Total a cobrar" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(calc.total) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Pagado" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(calc.pagado) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: calc.saldo > 0 ? "danger" : "ok", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Saldo" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(calc.saldo) })
+        ] }),
+        f.fechaCobro && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "ok", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Fecha de cobro" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: fmtDate(f.fechaCobro) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Costo repuestos" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(calc.costoRepuestos) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Gastos (vi\xE1ticos/otros)" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(calc.gastos) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "ganancia", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ganancia neta" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(calc.ganancia) })
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "form-actions", children: [
+        onDelete && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "btn danger", onClick: onDelete, children: "\u{1F5D1} Eliminar ficha" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "submit", className: "btn primary", children: "\u2713 Guardar ficha" })
+      ] })
+    ] });
+  }
+  function QuickCliente({ onAdd, onCancel }) {
+    const [nombre, setNombre] = (0, import_react.useState)("");
+    const [ciudad, setCiudad] = (0, import_react.useState)("");
+    const [telefono, setTelefono] = (0, import_react.useState)("");
+    const [cuitDni, setCuitDni] = (0, import_react.useState)("");
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "quick-add column", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { autoFocus: true, placeholder: "Nombre *", value: nombre, onChange: (e) => setNombre(e.target.value) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Ciudad", value: ciudad, onChange: (e) => setCiudad(e.target.value) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Tel\xE9fono", value: telefono, onChange: (e) => setTelefono(e.target.value) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "CUIT / DNI", value: cuitDni, onChange: (e) => setCuitDni(e.target.value) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "quick-add-actions", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => onAdd({ nombre, ciudad, telefono, cuitDni }), children: "\u2713 Crear" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: onCancel, children: "\u2715" })
+      ] })
+    ] });
+  }
+  function QuickVehicle({ onAdd, onCancel }) {
+    const [marca, setMarca] = (0, import_react.useState)("");
+    const [modelo, setModelo] = (0, import_react.useState)("");
+    const [patente, setPatente] = (0, import_react.useState)("");
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "quick-add column", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { autoFocus: true, placeholder: "Marca", value: marca, onChange: (e) => setMarca(e.target.value) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Modelo", value: modelo, onChange: (e) => setModelo(e.target.value) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { placeholder: "Patente", value: patente, onChange: (e) => setPatente(e.target.value.toUpperCase()) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "quick-add-actions", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: () => onAdd({ marca, modelo, patente }), children: "\u2713 Crear" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", onClick: onCancel, children: "\u2715" })
+      ] })
+    ] });
+  }
+  function NuevaFichaTab({ fichas, setFichas, clientes, vehiculos, repuestos, setRepuestos, setClientes, setVehiculos, config, setConfig, codigosDict, onCreated }) {
+    function saveFicha(ficha) {
+      const id = uid();
+      setFichas({ ...fichas, [id]: { ...ficha, id } });
+      onCreated();
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "stack", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "page-card", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { style: { marginBottom: 14 }, children: "Nueva ficha de trabajo" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        FichaForm,
+        {
+          value: {},
+          onSave: saveFicha,
+          onDelete: null,
+          clientes,
+          vehiculos,
+          repuestos,
+          setRepuestos,
+          setClientes,
+          setVehiculos,
+          todasLasFichas: fichas,
+          config,
+          setConfig,
+          codigosDict
+        }
+      )
+    ] }) });
+  }
+  function TableroTab({ fichas, setFichas, clientes, vehiculos, repuestos, setRepuestos, setClientes, setVehiculos, config, setConfig, codigosDict }) {
+    const [editingId, setEditingId] = (0, import_react.useState)(null);
+    const [weekStart, setWeekStart] = (0, import_react.useState)(mondayOf(today()));
+    const DIAS = ["Lunes", "Martes", "Mi\xE9rcoles", "Jueves", "Viernes"];
+    const todas = Object.values(fichas);
+    const turnos = todas.filter((f) => f.estado === "turno").sort((a, b) => (a.fechaIngreso || "").localeCompare(b.fechaIngreso || ""));
+    const enCurso = todas.filter((f) => f.estado === "ingresado" || f.estado === "en_proceso").sort((a, b) => (a.fechaIngreso || "").localeCompare(b.fechaIngreso || ""));
+    const aCobrar = todas.filter((f) => f.estado === "pendiente_pago").sort((a, b) => (a.vencimiento || "").localeCompare(b.vencimiento || ""));
+    const cobrados = todas.filter((f) => f.estado === "finalizado").sort((a, b) => (b.fechaEntrega || b.fechaIngreso || "").localeCompare(a.fechaEntrega || a.fechaIngreso || ""));
+    function saveFicha(ficha) {
+      const id = ficha.id || uid();
+      setFichas({ ...fichas, [id]: { ...ficha, id } });
+      setEditingId(null);
+    }
+    function removeFicha(id) {
+      if (!confirm("\xBFEliminar esta ficha?")) return;
+      const cp = { ...fichas };
+      delete cp[id];
+      setFichas(cp);
+    }
+    const editingFicha = editingId === "new" ? {} : editingId ? fichas[editingId] : null;
+    function Columna({ titulo, items, tono, tipo }) {
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "board-col", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "board-col-head", style: { "--col": tono }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: titulo }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: items.length })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "board-col-body", children: [
+          items.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "dim board-empty", children: "Nada ac\xE1 por ahora." }),
+          items.map((f) => {
+            const v = vehiculos[f.vehiculoId];
+            const c = clientes[f.clienteId];
+            const { saldo, total } = calcFicha(f);
+            const dias = diasDesde(f.fechaIngreso);
+            const vencida = tipo === "cobrar" && f.vencimiento && f.vencimiento < today();
+            return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: `board-card ${vencida ? "vencida" : ""}`, onClick: () => setEditingId(f.id), children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: v ? `${v.marca} ${v.modelo}` : "Veh\xEDculo sin datos" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "dim", children: [
+                c ? c.nombre : "sin cliente",
+                " ",
+                v?.patente ? `\xB7 ${v.patente}` : ""
+              ] }),
+              tipo === "curso" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "board-meta", children: dias != null ? `${dias} d\xEDa(s) en el taller` : "" }),
+              tipo === "cobrar" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: `board-meta ${vencida ? "danger" : ""}`, children: [
+                "Saldo ",
+                money(saldo),
+                " ",
+                f.vencimiento ? `\xB7 vence ${fmtDate(f.vencimiento)}` : ""
+              ] }),
+              tipo === "cobrado" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "board-meta ok", children: [
+                money(total),
+                " \xB7 ",
+                fmtDate(f.fechaEntrega || f.fechaIngreso)
+              ] })
+            ] }, f.id);
+          })
+        ] })
+      ] });
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stack", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "week-cal", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "week-cal-head", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "icon-btn", onClick: () => setWeekStart(addDays(weekStart, -7)), children: "\u2039" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+            "Turnos \u2014 semana del ",
+            fmtDate(weekStart),
+            " al ",
+            fmtDate(addDays(weekStart, 4))
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "btn small", onClick: () => setWeekStart(mondayOf(today())), children: "Hoy" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { type: "button", className: "icon-btn", onClick: () => setWeekStart(addDays(weekStart, 7)), children: "\u203A" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "week-cal-grid", children: [0, 1, 2, 3, 4].map((i) => {
+          const date = addDays(weekStart, i);
+          const items = turnos.filter((t) => t.fechaIngreso === date);
+          return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "week-day", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "week-day-head", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: DIAS[i] }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: fmtDate(date) })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "week-day-body", children: [
+              items.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "dim board-empty", children: "Sin turnos" }),
+              items.map((t) => {
+                const v = vehiculos[t.vehiculoId];
+                const c = clientes[t.clienteId];
+                return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "week-item", onClick: () => setEditingId(t.id), children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: c ? c.nombre : "sin cliente" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "dim", children: v ? `${v.marca} ${v.modelo}` : "veh\xEDculo sin datos" })
+                ] }, t.id);
+              })
+            ] })
+          ] }, date);
+        }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "board-grid", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Columna, { titulo: "En curso (en el taller)", items: enCurso, tono: "#3A4FB0", tipo: "curso" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Columna, { titulo: "A cobrar", items: aCobrar, tono: "#E0B93C", tipo: "cobrar" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Columna, { titulo: "Cobrados", items: cobrados, tono: "#4FAE7A", tipo: "cobrado" })
+      ] }),
+      editingFicha !== null && editingFicha !== void 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Modal, { title: editingFicha.id ? "Ficha de trabajo" : "Nueva ficha de trabajo", onClose: () => setEditingId(null), wide: true, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        FichaForm,
+        {
+          value: editingFicha,
+          onSave: saveFicha,
+          onDelete: editingFicha.id ? () => {
+            removeFicha(editingFicha.id);
+            setEditingId(null);
+          } : null,
+          clientes,
+          vehiculos,
+          repuestos,
+          setRepuestos,
+          setClientes,
+          setVehiculos,
+          todasLasFichas: fichas,
+          config,
+          setConfig,
+          codigosDict
+        }
+      ) })
+    ] });
+  }
+  function BarritasSVG({ data, width = 560, height = 220, colorBar = "#D6392F" }) {
+    if (!data.length) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "dim", children: "Sin datos." });
+    const max = Math.max(...data.map((d) => d.value), 1);
+    const barW = Math.min(46, (width - 20) / data.length - 10);
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", { viewBox: `0 0 ${width} ${height}`, width: "100%", height, children: data.map((d, i) => {
+      const h = d.value / max * (height - 40);
+      const x = 10 + i * ((width - 20) / data.length);
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("g", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", { x, y: height - 24 - h, width: barW, height: h, rx: 4, fill: colorBar }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", { x: x + barW / 2, y: height - 24 - h - 6, textAnchor: "middle", fontSize: "11", fill: "#EDEEF2", children: d.value }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", { x: x + barW / 2, y: height - 8, textAnchor: "middle", fontSize: "10", fill: "#8B8FA3", children: d.name.length > 12 ? d.name.slice(0, 11) + "\u2026" : d.name })
+      ] }, d.name);
+    }) });
+  }
+  function LineaSVG({ data, width = 560, height = 220 }) {
+    if (!data.length) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "dim", children: "Sin datos." });
+    const max = Math.max(...data.map((d) => Math.max(d.facturacion, d.ganancia)), 1);
+    const stepX = (width - 40) / Math.max(1, data.length - 1);
+    const toY = (v) => height - 30 - v / max * (height - 50);
+    const pointsF = data.map((d, i) => `${20 + i * stepX},${toY(d.facturacion)}`).join(" ");
+    const pointsG = data.map((d, i) => `${20 + i * stepX},${toY(d.ganancia)}`).join(" ");
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", { viewBox: `0 0 ${width} ${height}`, width: "100%", height, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("polyline", { points: pointsF, fill: "none", stroke: "#D6392F", strokeWidth: "2" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("polyline", { points: pointsG, fill: "none", stroke: "#4FAE7A", strokeWidth: "2" }),
+      data.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", { x: 20 + i * stepX, y: height - 8, textAnchor: "middle", fontSize: "9", fill: "#8B8FA3", children: d.mes.slice(5) }, d.mes)),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", { x: width - 90, y: 16, fontSize: "10", fill: "#D6392F", children: "\u25A0 Facturaci\xF3n" }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", { x: width - 90, y: 30, fontSize: "10", fill: "#4FAE7A", children: "\u25A0 Ganancia neta" })
+    ] });
+  }
+  function EstadisticasTab({ fichas, vehiculos }) {
+    const [anio, setAnio] = (0, import_react.useState)("todos");
+    const lista = Object.values(fichas);
+    const anios = Array.from(new Set(lista.map((f) => (f.fechaIngreso || "").slice(0, 4)).filter(Boolean))).sort();
+    const filtradas = anio === "todos" ? lista : lista.filter((f) => (f.fechaIngreso || "").startsWith(anio));
+    const porMes = {};
+    filtradas.forEach((f) => {
+      const mes = (f.fechaIngreso || "").slice(0, 7);
+      if (!mes) return;
+      const c = calcFicha(f);
+      if (!porMes[mes]) porMes[mes] = { mes, facturacion: 0, ganancia: 0, iva: 0 };
+      porMes[mes].facturacion += c.total;
+      porMes[mes].ganancia += c.ganancia;
+      porMes[mes].iva += c.iva;
+    });
+    const dataMensual = Object.values(porMes).sort((a, b) => a.mes.localeCompare(b.mes));
+    const totalFacturado = filtradas.reduce((s, f) => s + calcFicha(f).total, 0);
+    const totalGanancia = filtradas.reduce((s, f) => s + calcFicha(f).ganancia, 0);
+    const totalIva = filtradas.reduce((s, f) => s + calcFicha(f).iva, 0);
+    const porFalla = {};
+    filtradas.forEach((f) => {
+      const cats = f.categoriasFalla || [];
+      if (cats.length === 0) porFalla["Sin categorizar"] = (porFalla["Sin categorizar"] || 0) + 1;
+      else cats.forEach((k) => {
+        porFalla[k] = (porFalla[k] || 0) + 1;
+      });
+    });
+    const dataFallas = Object.entries(porFalla).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
+    const porTipo = {};
+    filtradas.forEach((f) => {
+      const v = vehiculos[f.vehiculoId];
+      const k = v ? v.tipo : "Sin datos";
+      porTipo[k] = (porTipo[k] || 0) + 1;
+    });
+    const dataTipos = Object.entries(porTipo).map(([name, value]) => ({ name, value }));
+    if (lista.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmptyState, { text: "Todav\xEDa no hay fichas cargadas para mostrar estad\xEDsticas." });
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stack", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "toolbar", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Estad\xEDsticas" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", { value: anio, onChange: (e) => setAnio(e.target.value), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: "todos", children: "Todos los a\xF1os" }),
+          anios.map((a) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", { value: a, children: a }, a))
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "kpi-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "kpi", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Facturaci\xF3n total" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(totalFacturado) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "kpi", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Ganancia neta" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(totalGanancia) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "kpi", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "IVA acumulado" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: money(totalIva) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "kpi", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Fichas" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: filtradas.length })
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "chart-card", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Facturaci\xF3n y ganancia por mes" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LineaSVG, { data: dataMensual })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "chart-row", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "chart-card half", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Fallas m\xE1s frecuentes" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BarritasSVG, { data: dataFallas, colorBar: "#D6392F" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "chart-card half", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Trabajos por tipo de veh\xEDculo" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BarritasSVG, { data: dataTipos, colorBar: "#3A4FB0" })
         ] })
       ] })
     ] });
   }
+  function ImportarTab({ clientes, setClientes, fichas, setFichas }) {
+    const [preview, setPreview] = (0, import_react.useState)(null);
+    const [status, setStatus] = (0, import_react.useState)("");
+    function normHeader(s) {
+      return (s || "").toString().trim().toLowerCase();
+    }
+    async function handleFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!window.XLSX) {
+        setStatus("No carg\xF3 la librer\xEDa de Excel todav\xEDa \u2014 revis\xE1 tu conexi\xF3n a internet y prob\xE1 de nuevo.");
+        return;
+      }
+      setStatus("Leyendo archivo\u2026");
+      const buf = await file.arrayBuffer();
+      const wb = window.XLSX.read(buf, { type: "array" });
+      const sheetName = wb.SheetNames.find((n) => normHeader(n).includes("client")) || wb.SheetNames[0];
+      const ws = wb.Sheets[sheetName];
+      const rows = window.XLSX.utils.sheet_to_json(ws, { header: 1, raw: false, defval: "" });
+      let headerIdx = -1, cols = {};
+      for (let i = 0; i < Math.min(rows.length, 30); i++) {
+        const row = rows[i].map(normHeader);
+        const idxCliente = row.findIndex((c) => c === "cliente");
+        if (idxCliente >= 0) {
+          headerIdx = i;
+          row.forEach((c, ci) => {
+            if (c.includes("cliente")) cols.cliente = ci;
+            else if (c.includes("fecha") && c.includes("emis")) cols.fecha = ci;
+            else if (c.includes("vencim")) cols.vencimiento = ci;
+            else if (c.includes("total venta")) cols.totalVenta = ci;
+            else if (c.includes("total cobrado")) cols.totalCobrado = ci;
+            else if (c.includes("observ")) cols.observaciones = ci;
+          });
+          break;
+        }
+      }
+      if (headerIdx === -1 || cols.cliente === void 0) {
+        setStatus('No pude encontrar la columna "Cliente" en este archivo.');
+        return;
+      }
+      const candidatos = [];
+      for (let i = headerIdx + 1; i < rows.length; i++) {
+        const row = rows[i];
+        const nombre = (row[cols.cliente] || "").toString().trim();
+        if (!nombre || /ingresar/i.test(nombre)) continue;
+        candidatos.push({
+          nombre,
+          fecha: (row[cols.fecha] || "").toString().trim(),
+          vencimiento: (row[cols.vencimiento] || "").toString().trim(),
+          totalVenta: parseFloat((row[cols.totalVenta] || "0").toString().replace(/[^0-9.,-]/g, "").replace(",", ".")) || 0,
+          totalCobrado: parseFloat((row[cols.totalCobrado] || "0").toString().replace(/[^0-9.,-]/g, "").replace(",", ".")) || 0,
+          observaciones: (row[cols.observaciones] || "").toString().trim()
+        });
+      }
+      setPreview({ candidatos });
+      setStatus(candidatos.length ? `Se encontraron ${candidatos.length} fila(s) con datos reales.` : "No se encontraron filas con datos reales.");
+    }
+    function parseFechaExcel(str) {
+      if (!str) return "";
+      const m = str.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+      if (m) {
+        let [, d, mo, y] = m;
+        if (y.length === 2) y = "20" + y;
+        return `${y}-${mo.padStart(2, "0")}-${d.padStart(2, "0")}`;
+      }
+      return "";
+    }
+    function confirmarImportacion() {
+      if (!preview) return;
+      const nuevosClientes = { ...clientes };
+      const nuevasFichas = { ...fichas };
+      const nombreToId = {};
+      Object.values(nuevosClientes).forEach((c) => {
+        nombreToId[c.nombre.toLowerCase()] = c.id;
+      });
+      preview.candidatos.forEach((cand) => {
+        let clienteId = nombreToId[cand.nombre.toLowerCase()];
+        if (!clienteId) {
+          clienteId = uid();
+          nuevosClientes[clienteId] = { id: clienteId, nombre: cand.nombre };
+          nombreToId[cand.nombre.toLowerCase()] = clienteId;
+        }
+        const fid = uid();
+        const fechaIngreso = parseFechaExcel(cand.fecha) || "";
+        nuevasFichas[fid] = {
+          id: fid,
+          clienteId,
+          vehiculoId: "",
+          fechaIngreso,
+          fechaEntrega: "",
+          vencimiento: parseFechaExcel(cand.vencimiento) || addDays(fechaIngreso, 30) || "",
+          estado: cand.totalCobrado >= cand.totalVenta && cand.totalVenta > 0 ? "finalizado" : "pendiente_pago",
+          categoriasFalla: [],
+          subtiposReprogramacion: [],
+          sintoma: cand.observaciones,
+          diagnostico: "",
+          solucion: "",
+          notas: "[Importado de Contagram \u2014 requiere revisi\xF3n: asignar veh\xEDculo y completar diagn\xF3stico/soluci\xF3n]",
+          codigosError: [],
+          fotos: [],
+          repuestosUsados: [],
+          montoTrabajo: cand.totalVenta,
+          facturaA: false,
+          formaPago: "Efectivo",
+          gastos: [],
+          pagos: cand.totalCobrado > 0 ? [{ fecha: fechaIngreso || today(), monto: cand.totalCobrado }] : [],
+          requiereRevision: true
+        };
+      });
+      setClientes(nuevosClientes);
+      setFichas(nuevasFichas);
+      setStatus(`Listo: se importaron ${preview.candidatos.length} ficha(s), marcadas para revisi\xF3n.`);
+      setPreview(null);
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stack", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "import-card", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Importar planilla Contagram" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "dim", children: "Sub\xED tu archivo .xlsx. Vamos a crear los clientes que falten y una ficha por cada fila con datos reales." }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { className: "btn primary", style: { display: "inline-flex", cursor: "pointer" }, children: [
+          "Elegir archivo",
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { type: "file", accept: ".xlsx,.xls", hidden: true, onChange: handleFile })
+        ] })
+      ] }) }),
+      status && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "alert-box info", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: status }) }),
+      preview && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "stack", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", { className: "table", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Cliente" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Fecha" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Total venta" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Cobrado" }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Observaciones" })
+          ] }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: preview.candidatos.slice(0, 25).map((c, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: c.nombre }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: c.fecha }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: money(c.totalVenta) }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: money(c.totalCobrado) }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { className: "dim ellipsis", children: c.observaciones })
+          ] }, i)) })
+        ] }),
+        preview.candidatos.length > 25 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { className: "dim", children: [
+          "\u2026y ",
+          preview.candidatos.length - 25,
+          " m\xE1s."
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", { className: "btn primary block", onClick: confirmarImportacion, children: [
+          "Importar ",
+          preview.candidatos.length,
+          " ficha(s)"
+        ] })
+      ] })
+    ] });
+  }
+  var CSS = `
+:root{
+  --bg:#14151A; --surface:#1D1F26; --surface-2:#262933; --border:#333744;
+  --text:#EDEEF2; --text-dim:#8B8FA3;
+  --c-accent:#D6392F; --c-info:#3A4FB0; --c-ok:#4FAE7A; --c-warn:#E0B93C; --c-danger:#B23A3A; --c-turno:#8B7CD6;
+  --font-display:'Segoe UI',sans-serif; --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;}
+.app{background:var(--bg);color:var(--text);min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;}
+.login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:24px;padding:20px;}
+.brand{display:flex;align-items:center;gap:10px;}
+.jhb{font-weight:700;font-size:26px;font-style:italic;color:var(--c-accent);-webkit-text-stroke:1px #2a0d0a;}
+.tag{font-weight:700;font-size:11px;font-style:italic;line-height:1.2;color:var(--c-info);text-transform:uppercase;}
+.status-mini{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-dim);}
+.dot{width:7px;height:7px;border-radius:99px;background:var(--c-ok);display:inline-block;}
+.dot.off{background:var(--c-danger);}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(20,21,26,0.95);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;flex:1;}
+.tab{padding:8px 12px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--text-dim);cursor:pointer;font-size:13px;position:relative;}
+.tab:hover{color:var(--text);background:var(--surface-2);}
+.tab.active{background:var(--surface-2);border-color:var(--border);color:var(--c-accent);}
+.tab-dot{position:absolute;top:2px;right:2px;background:var(--c-danger);color:#fff;border-radius:99px;font-size:9px;padding:1px 5px;font-weight:700;}
+.content{padding:22px;max-width:1200px;margin:0 auto;}
+.stack{display:flex;flex-direction:column;gap:16px;}
+h2{font-size:16px;font-weight:700;margin:0;}
+h3{font-size:14px;font-weight:700;margin:0 0 10px;}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.toolbar.wrap{background:var(--surface);border:1px solid var(--border);padding:10px;border-radius:10px;}
+.search{flex:1;min-width:180px;}
+select,input,textarea{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:13px;outline:none;font-family:inherit;}
+select:focus,input:focus,textarea:focus{border-color:var(--c-accent);}
+textarea{resize:vertical;width:100%;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);cursor:pointer;font-size:13px;font-weight:600;}
+.btn:hover{border-color:var(--c-accent);}
+.btn.primary{background:var(--c-accent);border-color:var(--c-accent);color:#fff;}
+.btn.danger{color:var(--c-danger);border-color:var(--c-danger);background:transparent;}
+.btn.block{width:100%;justify-content:center;}
+.btn.small{padding:5px 9px;font-size:12px;}
+.icon-btn{background:transparent;border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:var(--text-dim);cursor:pointer;}
+.icon-btn:hover{color:var(--text);border-color:var(--c-accent);}
+.icon-btn.danger:hover{color:var(--c-danger);border-color:var(--c-danger);}
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;}
+.card-actions{display:flex;gap:4px;}
+.card-line{font-size:12.5px;}
+.card-line.dim{color:var(--text-dim);}
+.card-line.mono{font-family:var(--font-mono);color:var(--text-dim);}
+.card-foot{margin-top:8px;font-size:11.5px;color:var(--text-dim);border-top:1px solid var(--border);padding-top:8px;}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--surface-2);border:1px solid var(--border);border-radius:99px;padding:3px 9px;font-size:11.5px;color:var(--text-dim);}
+.chip.warn{border-color:var(--c-warn);color:var(--c-warn);}
+.chip.mono{font-family:var(--font-mono);}
+.chip button{background:none;border:none;color:inherit;cursor:pointer;font-size:11px;margin-left:2px;}
+.chip-row{display:flex;flex-wrap:wrap;gap:4px;}
+.check-list{display:flex;flex-wrap:wrap;gap:8px;}
+.check-chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 11px;font-size:12.5px;color:var(--text-dim);cursor:pointer;}
+.check-chip input{width:auto;margin:0;}
+.check-chip.on{border-color:var(--c-accent);color:var(--text);background:rgba(214,57,47,0.1);}
+.table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.table th{text-align:left;font-size:11px;text-transform:uppercase;color:var(--text-dim);padding:10px 12px;border-bottom:1px solid var(--border);background:var(--surface-2);}
+.table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:13px;}
+.table tr.row-warn{background:rgba(224,185,60,0.06);}
+.row-actions{display:flex;gap:4px;}
+.mono{font-family:var(--font-mono);}
+.dim{color:var(--text-dim);}
+.ellipsis{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:280px;display:inline-block;}
+.stepper{display:flex;align-items:center;gap:8px;}
+.stepper button{width:22px;height:22px;border-radius:6px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);cursor:pointer;}
+.alert-box{background:rgba(224,185,60,0.08);border:1px solid var(--c-warn);color:var(--c-warn);padding:12px 14px;border-radius:10px;}
+.alert-box.info{background:rgba(58,79,176,0.08);border-color:var(--c-info);color:#a9b6e8;}
+.pending-list{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+.pending-list .chip button{background:var(--c-warn);color:#191203;border-radius:5px;padding:0 5px;margin-left:6px;}
+.empty-state{padding:50px 20px;color:var(--text-dim);text-align:center;}
+.modal-overlay{position:fixed;inset:0;background:rgba(10,10,14,0.7);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:100%;max-width:460px;max-height:88vh;overflow:auto;}
+.modal-box.wide{max-width:760px;}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);}
+.modal-head button{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:16px;}
+.modal-body{padding:18px;}
+.form{display:flex;flex-direction:column;gap:12px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-row.three{grid-template-columns:1fr 1fr 1fr;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field-label{font-size:11.5px;color:var(--text-dim);font-weight:600;}
+.field-hint{font-size:11px;color:var(--text-dim);}
+.checkbox-inline{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text-dim);}
+.checkbox-inline input{width:auto;}
+.led-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-dim);}
+.led-badge i{width:7px;height:7px;border-radius:99px;background:var(--led);display:inline-block;}
+.fichas-list{display:flex;flex-direction:column;gap:8px;}
+.ficha-row{display:grid;grid-template-columns:1.4fr 1.6fr 1.2fr;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;}
+.ficha-row:hover{border-color:var(--c-accent);}
+.ficha-row.vencida{border-left:3px solid var(--c-danger);}
+.ficha-main,.ficha-mid{display:flex;flex-direction:column;gap:2px;}
+.ficha-side{display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:12px;}
+.saldo{font-weight:700;font-size:12.5px;}
+.saldo.ok{color:var(--c-ok);}
+.saldo.danger{color:var(--c-danger);}
+.inline-add{display:flex;gap:6px;}
+.inline-add select{flex:1;}
+.quick-add{display:flex;gap:6px;margin-top:6px;}
+.quick-add.column{flex-direction:column;}
+.quick-add-actions{display:flex;gap:6px;}
+.quick-add-actions button{background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);cursor:pointer;}
+.codigo-list{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.codigo-list input{flex:1;min-width:140px;}
+.foto-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.foto-item{width:110px;position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+.foto-item img{width:100%;height:90px;object-fit:cover;display:block;}
+.foto-loading{width:100%;height:90px;display:flex;align-items:center;justify-content:center;background:var(--surface-2);}
+.foto-actions{display:flex;justify-content:space-between;background:var(--surface-2);padding:4px;}
+.foto-actions button{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:10px;}
+.foto-upload{width:110px;height:90px;border:1.5px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);cursor:pointer;font-size:11px;text-align:center;}
+.ai-box{margin-top:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12.5px;display:flex;flex-direction:column;gap:4px;}
+.ai-box.loading{color:var(--text-dim);}
+.ai-box.error{color:var(--c-danger);}
+.ai-match{color:var(--c-info);}
+.voice-box{display:flex;gap:8px;align-items:flex-start;}
+.voice-box textarea{flex:1;}
+.mic-btn{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text-dim);cursor:pointer;font-size:12px;white-space:nowrap;}
+.mic-btn.on{background:var(--c-danger);border-color:var(--c-danger);color:#fff;}
+.section-title{font-weight:700;font-size:12.5px;text-transform:uppercase;color:var(--c-accent);margin-top:6px;border-top:1px solid var(--border);padding-top:14px;}
+.repuestos-usados{display:flex;flex-direction:column;gap:6px;}
+.repuesto-row{display:grid;grid-template-columns:1.4fr 70px 80px 90px auto;gap:8px;align-items:center;font-size:12.5px;}
+.pagos-box,.gastos-box{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px;}
+.pagos-head{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--text-dim);}
+.pago-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;}
+.gasto-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:center;}
+.totales-box{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;font-size:12.5px;}
+.totales-box>div{display:flex;flex-direction:column;gap:2px;}
+.totales-box b{font-family:var(--font-mono);font-size:15px;}
+.totales-box .danger b{color:var(--c-danger);}
+.totales-box .ok b{color:var(--c-ok);}
+.totales-box .ganancia b{color:var(--c-accent);}
+.form-actions{display:flex;justify-content:space-between;gap:10px;margin-top:6px;}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;}
+.kpi span{font-size:11.5px;color:var(--text-dim);text-transform:uppercase;}
+.kpi b{font-size:20px;}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.import-card{display:flex;gap:16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;}
+.import-card p{max-width:520px;margin:4px 0 10px;}
+.page-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;max-width:820px;margin:0 auto;}
+.week-cal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.week-cal-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-weight:700;font-size:13px;}
+.week-cal-head span{flex:1;color:var(--text-dim);font-weight:600;font-size:12.5px;}
+.week-cal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.week-day{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;overflow:hidden;min-height:120px;}
+.week-day-head{display:flex;flex-direction:column;padding:8px 10px;border-bottom:2px solid var(--c-turno);}
+.week-day-head span{font-size:11px;text-transform:uppercase;color:var(--c-turno);font-weight:700;}
+.week-day-head b{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);font-weight:600;}
+.week-day-body{padding:8px;display:flex;flex-direction:column;gap:6px;}
+.week-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 9px;cursor:pointer;}
+.week-item strong{font-size:12px;}
+.week-item span{font-size:11px;}
+.board-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.board-col{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;max-height:74vh;display:flex;flex-direction:column;}
+.board-col-head{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:2px solid var(--col);font-weight:700;font-size:13px;background:var(--surface-2);}
+.board-col-head b{color:var(--col);font-size:15px;}
+.board-col-body{padding:10px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;}
+.board-card{background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px;}
+.board-card.vencida{border-left:3px solid var(--c-danger);}
+.board-card strong{font-size:13px;}
+.board-meta{font-size:11.5px;color:var(--text-dim);}
+.board-meta.danger{color:var(--c-danger);font-weight:600;}
+.board-meta.ok{color:var(--c-ok);}
+.venc-line{font-size:12.5px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
+.venc-line b{font-family:var(--font-mono);}
+.auto-date{font-family:var(--font-mono);font-size:13px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
+.error-box{background:rgba(178,58,58,0.12);border:1px solid var(--c-danger);color:#ffb4b0;padding:10px;border-radius:8px;font-size:12.5px;margin:10px 0;}
+.warn-box{background:rgba(224,185,60,0.1);border:1px solid var(--c-warn);color:var(--c-warn);padding:10px;border-radius:8px;font-size:12px;margin-top:12px;}
+@media (max-width:900px){.board-grid,.week-cal-grid,.chart-row{grid-template-columns:1fr;}}
+@media (max-width:760px){
+  .form-row,.form-row.three{grid-template-columns:1fr;}
+  .ficha-row{grid-template-columns:1fr;}
+  .ficha-side{align-items:flex-start;}
+  .content{padding:14px;}
+  .gasto-row,.repuesto-row{grid-template-columns:1fr;}
+  .tabs{overflow-x:auto;flex-wrap:nowrap;}
+}
+`;
   (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App, {}));
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'taller-jhb-v2';
+const CACHE_NAME = 'taller-jhb-v1';
 const APP_SHELL = ['./', './index.html', './app.js', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', (event) => {
