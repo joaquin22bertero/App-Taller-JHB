@@ -21867,7 +21867,7 @@
         localStorage.setItem("taller_jhb_last_login", "1");
         resolve(accessToken);
       };
-      tokenClient.requestAccessToken({ prompt: interactive ? "consent" : "" });
+      tokenClient.requestAccessToken({ prompt: "" });
     });
   }
   async function driveFetch(url, options = {}) {
@@ -22151,6 +22151,15 @@ Content-Type: ${mediaType}\r
       const { saldo } = calcFicha(f);
       return saldo > 0 && f.vencimiento && f.vencimiento < today();
     }).length;
+    (0, import_react.useEffect)(() => {
+      if (authStatus !== "listo") return;
+      const msHastaRefresh = Math.max(5e3, tokenExpiry - Date.now() - 5 * 60 * 1e3);
+      const t = setTimeout(() => {
+        ensureAuth(false).catch(() => {
+        });
+      }, msHastaRefresh);
+      return () => clearTimeout(t);
+    }, [authStatus]);
     if (authStatus !== "listo") {
       return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "app", children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: CSS }),
@@ -23577,7 +23586,7 @@ body{margin:0;}
 .status-mini{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-dim);}
 .dot{width:7px;height:7px;border-radius:99px;background:var(--c-ok);display:inline-block;}
 .dot.off{background:var(--c-danger);}
-.topbar{position:sticky;top:0;z-index:20;background:rgba(20,21,26,0.95);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(20,21,26,0.95);border-bottom:1px solid var(--border);padding:calc(12px + env(safe-area-inset-top)) 20px 12px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
 .tabs{display:flex;gap:4px;flex-wrap:wrap;flex:1;}
 .tab{padding:8px 12px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--text-dim);cursor:pointer;font-size:13px;position:relative;}
 .tab:hover{color:var(--text);background:var(--surface-2);}
@@ -23738,9 +23747,12 @@ textarea{resize:vertical;width:100%;}
   .form-row,.form-row.three{grid-template-columns:1fr;}
   .ficha-row{grid-template-columns:1fr;}
   .ficha-side{align-items:flex-start;}
-  .content{padding:14px;}
+  .content{padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom));}
   .gasto-row,.repuesto-row{grid-template-columns:1fr;}
-  .tabs{overflow-x:auto;flex-wrap:nowrap;}
+  .topbar{flex-wrap:wrap;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;}
+  .tabs{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap;gap:2px;-webkit-overflow-scrolling:touch;}
+  .tab{white-space:nowrap;padding:7px 10px;font-size:12.5px;}
+  .status-mini{order:2;margin-left:auto;}
 }
 `;
   (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App, {}));
