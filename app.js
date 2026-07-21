@@ -21722,7 +21722,7 @@
   var import_react = __toESM(require_react());
   var import_client = __toESM(require_client());
   var import_jsx_runtime = __toESM(require_jsx_runtime());
-  var GOOGLE_CLIENT_ID = "TU_CLIENT_ID_ACA.apps.googleusercontent.com";
+  var GOOGLE_CLIENT_ID = "286258665-bqh23vpr4peaje2o684l4cp6np6nsnbf.apps.googleusercontent.com";
   var DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
   var DB_FILENAME = "taller_jhb_db.json";
   var tokenClient = null;
@@ -21927,7 +21927,7 @@ ${JSON.stringify(initialData)}\r
           errorMsg
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { className: "btn primary", onClick: () => conectar(true), disabled: status === "conectando", children: status === "conectando" ? "Conectando\u2026" : "Conectar con Google" }),
-        GOOGLE_CLIENT_ID.includes("TU_CLIENT_ID_ACA") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "warn-box", children: "\u26A0\uFE0F Todav\xEDa no configuraste tu Client ID de Google en el c\xF3digo (variable GOOGLE_CLIENT_ID). Sin eso, el login no va a funcionar." })
+        GOOGLE_CLIENT_ID.includes("286258665-bqh23vpr4peaje2o684l4cp6np6nsnbf") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "warn-box", children: "\u26A0\uFE0F Todav\xEDa no configuraste tu Client ID de Google en el c\xF3digo (variable GOOGLE_CLIENT_ID). Sin eso, el login no va a funcionar." })
       ] }),
       status === "listo" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "card", children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Clientes \u2014 prueba de guardado" }),
