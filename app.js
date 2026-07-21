@@ -21847,7 +21847,17 @@
           }
         });
       }
+      let done = false;
+      const timer = interactive ? null : setTimeout(() => {
+        if (!done) {
+          done = true;
+          reject(new Error("timeout_silencioso"));
+        }
+      }, 4e3);
       tokenClient.callback = (resp) => {
+        if (done) return;
+        done = true;
+        if (timer) clearTimeout(timer);
         if (resp.error) {
           reject(new Error(resp.error));
           return;
@@ -22097,8 +22107,12 @@ Content-Type: ${mediaType}\r
         saveLocalCache(dbRef.current);
         setAuthStatus("listo");
       } catch (e) {
-        setAuthStatus("error");
-        setErrorMsg(e.message || String(e));
+        if (!interactive) {
+          setAuthStatus("inicio");
+        } else {
+          setAuthStatus("error");
+          setErrorMsg(e.message || String(e));
+        }
       }
     }, []);
     const persistTimer = (0, import_react.useRef)(null);
